@@ -55,7 +55,7 @@ class AppController extends Controller
                   'fields' => ['username' => 'username', 'password' => 'password']
                ]
             ],
-            'authError' => 'You are not allowed here',
+            'authError' => false,
             'loginAction' => ['controller' => 'Authexs', 'action' => 'login'],
             'loginRedirect' => ['controller' => 'Users', 'action' => 'index'],
             'logoutRedirect' => ['controller' => 'Authexs', 'action' => 'login']

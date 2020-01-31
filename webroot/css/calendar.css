@@ -31,6 +31,11 @@ caption {
 	border: 1px solid #ccc;
 }
 
+#calendar td:hover {
+	background: #eee;
+	cursor: pointer;
+}
+
 #calendar .weekdays {
 	background: #1770cf;
 }
@@ -82,8 +87,20 @@ caption {
 	text-decoration: none;
 }
 
+#calendar .event:hover {
+  background: #c4e2f2;
+	cursor: pointer;
+}
+
 #calendar .event-desc {
 	color: #666;
+	margin: 3px 0 7px 0;
+	text-decoration: none;
+}
+
+#calendar .event-user {
+	color: #000;
+	font-size: 11px;
 	margin: 3px 0 7px 0;
 	text-decoration: none;
 }
@@ -91,6 +108,12 @@ caption {
 #calendar .other-month {
 	background: #edf6ff;
 	color: #666;
+}
+
+#calendar .other-month:hover {
+	background: #ddf6ff;
+	color: #666;
+	cursor: pointer;
 }
 
 /* ============================
@@ -150,4 +173,9 @@ a:hover {
 
 .round {
   border-radius: 50% !important;
+}
+
+.align-right-event {
+	float: right;
+	cursor: pointer;
 }

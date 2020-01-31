@@ -8,8 +8,11 @@
    class UsersController extends AppController{
 
       public function index(){
-         $users = TableRegistry::get('users');
-         $query = $users->find();
+         $this->loadModel('Users');
+         $query = $this->Users->find('all',[
+           'conditions' => [
+            'adm'=>0
+         ]]);
          $this->set('results',$query);
       }
 

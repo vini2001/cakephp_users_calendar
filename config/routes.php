@@ -80,6 +80,8 @@ $routes->scope('/', function (RouteBuilder $builder) {
     $builder->connect('/users/add', ['controller' => 'Users', 'action' => 'add']);
     $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
     $builder->connect('/calendar/:plusMonths', ['controller' => 'Calendar', 'action' => 'index'], ['pass' => ['plusMonths']]);
+    $builder->connect('/calendar/add', ['controller' => 'Calendar', 'action' => 'add']);
+    $builder->connect('/calendar/delete/:id', ['controller' => 'Calendar', 'action' => 'delete'], ['pass' => ['id']]);
     $builder->connect('/users/edit', ['controller' => 'Users', 'action' => 'edit']);
     $builder->connect('/users/delete', ['controller' => 'Users', 'action' => 'delete']);
 
