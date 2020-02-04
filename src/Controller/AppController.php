@@ -49,7 +49,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-        /*$this->loadComponent('Auth', [
+        $this->loadComponent('Auth', [
             'authenticate' => [
                'Form' => [
                   'fields' => ['username' => 'username', 'password' => 'password']
@@ -67,7 +67,7 @@ class AppController extends Controller
          if($this->Auth->user()) {
              $this->set('loggedIn',true);
              $this->set('name',$this->Auth->user('name'));
-         }else $this->set('loggedIn',false);*/
+         }else $this->set('loggedIn',false);
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
