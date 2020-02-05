@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -14,7 +12,7 @@ use Cake\ORM\Entity;
  * @property string|null $name
  * @property bool|null $adm
  *
- * @property \App\Model\Entity\Event[] $event
+ * @property \App\Model\Entity\Event[] $events
  */
 class User extends Entity
 {
@@ -32,7 +30,7 @@ class User extends Entity
         'password' => true,
         'name' => true,
         'adm' => true,
-        'event' => true,
+        'events' => true
     ];
 
     /**
@@ -41,6 +39,6 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password',
+        'password'
     ];
 }

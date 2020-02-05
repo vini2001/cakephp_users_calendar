@@ -4,6 +4,7 @@
    use Cake\ORM\TableRegistry;
    use Cake\Datasource\ConnectionManager;
    use Cake\Auth\DefaultPasswordHasher;
+   use Cake\Event\Event;
 
    class CalendarController extends AppController{
 
@@ -27,21 +28,42 @@
            $user_id = $this->Auth->user('id');
 
            $this->loadModel('Events');
-           $ev = $this->Events->newEmptyEntity();
+           $ev = $this->Events->newEntity();
            $ev->title = $title;
            $ev->date = $date;
            $ev->user_id = $user_id;
-           $this->Events->save($ev);
-
-           return $this->redirect(['action' => 'index']);
+           if($this->Events->save($ev)){
+             return $this->response
+              ->withType('application/json')
+              ->withStringBody(json_encode([
+                'status' => 200,
+                'id' => $ev->id
+              ]));
+           }else{
+             return $this->response
+              ->withType('application/json')
+              ->withStringBody(json_encode([
+                'status' => 400
+              ]));
+           }
         }
       }
 
-      public function delete($id){
-         $this->loadModel('Events');
-         $event = $this->Events->get($id);
-         $this->Events->delete($event);
-         return $this->redirect(['controller' => 'Calendar', 'action' => 'index']);
+      public function delete(){
+          $id = $this->request->getData('id');
+          $this->loadModel('Events');
+          $event = $this->Events->get($id);
+          $this->Events->delete($event);
+
+         return $this->response
+          ->withType('application/json')
+          ->withStringBody(json_encode([
+            'status' => 200
+          ]));
+      }
+
+      public function beforeFilter(Event $event) {
+          parent::beforeFilter($event);
       }
 
 

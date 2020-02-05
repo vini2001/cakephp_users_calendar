@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\EventsTable;
@@ -17,16 +15,16 @@ class EventsTableTest extends TestCase
      *
      * @var \App\Model\Table\EventsTable
      */
-    protected $Events;
+    public $Events;
 
     /**
      * Fixtures
      *
      * @var array
      */
-    protected $fixtures = [
+    public $fixtures = [
         'app.Events',
-        'app.Users',
+        'app.Users'
     ];
 
     /**
@@ -34,7 +32,7 @@ class EventsTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
         $config = TableRegistry::getTableLocator()->exists('Events') ? [] : ['className' => EventsTable::class];
@@ -46,7 +44,7 @@ class EventsTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    public function tearDown()
     {
         unset($this->Events);
 
@@ -58,7 +56,7 @@ class EventsTableTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize(): void
+    public function testInitialize()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -68,7 +66,7 @@ class EventsTableTest extends TestCase
      *
      * @return void
      */
-    public function testValidationDefault(): void
+    public function testValidationDefault()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -78,7 +76,7 @@ class EventsTableTest extends TestCase
      *
      * @return void
      */
-    public function testBuildRules(): void
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

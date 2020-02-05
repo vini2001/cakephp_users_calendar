@@ -18,7 +18,7 @@
         $date = date_create();
         $dateCopy = date_create();
         date_add($date, date_interval_create_from_date_string("$plusMonths months"));
-        if($date->format('m') - $dateCopy->format('m') > 1){
+        if($date->format('m') - $dateCopy->format('m') > $plusMonths){
           date_add($date, date_interval_create_from_date_string("-5 days"));
           //To avoid skiping a month when the next you has less days
           //Ex, today is January 30th, if I add one month, it would be
@@ -31,7 +31,7 @@
         $date = date_create();
         $dateCopy = date_create();
         date_add($date, date_interval_create_from_date_string("$plusMonths months"));
-        if($date->format('m') - $dateCopy->format('m') > 1){
+        if($date->format('m') - $dateCopy->format('m') > $plusMonths){
           date_add($date, date_interval_create_from_date_string("-5 days"));
         }
         date_add($date, date_interval_create_from_date_string('-'.($date->format('d') - 1).' day'));
@@ -42,7 +42,7 @@
         $date = date_create();
         $dateCopy = date_create();
         date_add($date, date_interval_create_from_date_string("$plusMonths months"));
-        if($date->format('m') - $dateCopy->format('m') > 1){
+        if($date->format('m') - $dateCopy->format('m') > $plusMonths){
           date_add($date, date_interval_create_from_date_string("-5 days"));
         }
         date_add($date, date_interval_create_from_date_string('-'.($date->format('d') - 1).' day'));
@@ -175,7 +175,7 @@
           'order'=>['date'=>'asc'],
           'contain' => ['Users']
         ]);
-        
+
         $response = array();
         foreach ($events as $key => $event) {
           $dateValue = strtotime($event["date"]);

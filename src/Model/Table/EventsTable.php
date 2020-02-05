@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -11,12 +9,12 @@ use Cake\Validation\Validator;
 /**
  * Events Model
  *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\Event get($primaryKey, $options = [])
  * @method \App\Model\Entity\Event newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Event[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Event|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Event|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Event saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Event patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Event[] patchEntities($entities, array $data, array $options = [])
@@ -30,7 +28,7 @@ class EventsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void
+    public function initialize(array $config)
     {
         parent::initialize($config);
 
@@ -39,7 +37,7 @@ class EventsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'user_id'
         ]);
     }
 
@@ -49,15 +47,15 @@ class EventsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator
+    public function validationDefault(Validator $validator)
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->dateTime('date')
-            ->notEmptyDateTime('date');
+            ->allowEmptyDateTime('date', false);
 
         $validator
             ->scalar('title')
@@ -74,7 +72,7 @@ class EventsTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules): RulesChecker
+    public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 

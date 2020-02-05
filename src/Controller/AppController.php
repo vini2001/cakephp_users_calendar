@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -42,7 +41,7 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize(): void
+    public function initialize()
     {
         parent::initialize();
 
@@ -67,6 +66,7 @@ class AppController extends Controller
          if($this->Auth->user()) {
              $this->set('loggedIn',true);
              $this->set('name',$this->Auth->user('name'));
+             $this->set('is_adm',$this->Auth->user('adm'));
          }else $this->set('loggedIn',false);
 
         /*

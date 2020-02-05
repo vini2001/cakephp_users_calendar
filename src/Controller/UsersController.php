@@ -17,23 +17,64 @@
       }
 
       public function add(){
+
+        $this->loadModel('Users');
+
          if($this->request->is('post')){
-            $username = $this->request->getData('username');
-            $name = $this->request->getData('name');
             $hashPswdObj = new DefaultPasswordHasher;
             $password = $hashPswdObj->hash($this->request->getData('password'));
-            $users_table = TableRegistry::get('users');
-            $users = $users_table->newEmptyEntity();
-            $users->username = $username;
-            $users->password = $password;
-            $users->name = $name;
+            $user = $this->Users->newEntity($this->request->getData());
+            $user->password = $password;
 
-            if($users_table->save($users))
-            return $this->redirect(['action' => 'index']);
+            if($this->Users->save($user))
+              return $this->redirect(['action' => 'index']);
+
+            if ($user->errors()) {
+              $error_msg = [];
+                foreach($user->errors() as $key => $errors){
+                    if(is_array($errors)){
+                        foreach($errors as $key2 => $error){
+                            $error_msg[$key]    =   $error;
+                        }
+                    }else{
+                        $error_msg[$key]    =   $errors;
+                    }
+                }
+                /*if(!empty($error_msg)){
+                    foreach($error_msg as $error){
+                        $this->Flash->error($error);
+                    }
+                }*/                
+                $this->set('errors', $error_msg);
+            }
          }
+
+         $user = $this->Users->newEntity();
+         $this->set('user', $user);
       }
 
       public function edit($id){
+
+        $user = $this->Users->newEntity($this->request->getData());
+        if ($user->errors()) {
+          $error_msg = [];
+            foreach($user->errors() as $key => $errors){
+                if(is_array($errors)){
+                    foreach($errors as $key2 => $error){
+                        $error_msg[$key]    =   $error;
+                    }
+                }else{
+                    $error_msg[$key]    =   $errors;
+                }
+            }
+            if(!empty($error_msg)){
+                foreach($error_msg as $error){
+                    $this->Flash->error($error);
+                }
+            }
+            $this->set('errors', $error_msg);
+        }
+
          if($this->request->is('post')){
             $username = $this->request->getData('username');
             $name = $this->request->getData('name');
@@ -56,6 +97,10 @@
             $this->set('name',$users->name);
             $this->set('id',$id);
          }
+
+         $this->loadModel('Users');
+         $user = $this->Users->newEntity();
+         $this->set('user', $user);
       }
 
       public function delete($id){

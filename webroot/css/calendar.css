@@ -1,4 +1,16 @@
 /* declare a 7 column grid on the table */
+
+.input {
+	margin-right: 20px;
+}
+
+.rowForm {
+	display:flex;
+	flex-direction:column;
+	padding:0;
+	width:100%
+}
+
 #calendar {
 	width: 100%;
   display: grid;
@@ -74,7 +86,7 @@ caption {
 	font-size: 12px;
 }
 
-#calendar .event {
+.event {
   flex: 0 0 auto;
 	font-size: 13px;
 	border-radius: 4px;
@@ -87,18 +99,18 @@ caption {
 	text-decoration: none;
 }
 
-#calendar .event:hover {
+.event:hover {
   background: #c4e2f2;
 	cursor: pointer;
 }
 
-#calendar .event-desc {
+.event-desc {
 	color: #666;
 	margin: 3px 0 7px 0;
 	text-decoration: none;
 }
 
-#calendar .event-user {
+.event-user {
 	color: #000;
 	font-size: 11px;
 	margin: 3px 0 7px 0;
@@ -178,4 +190,26 @@ a:hover {
 .align-right-event {
 	float: right;
 	cursor: pointer;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+
+.spinner:before {
+	background: rgba(0,0,0,0.05);
+  content: '';
+  box-sizing: border-box;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-top: -25px;
+  margin-left: -25px;
+  border-radius: 50%;
+  border-top: 4px solid #07d;
+  border-right: 4px solid transparent;
+  animation: spinner .6s linear infinite;
 }

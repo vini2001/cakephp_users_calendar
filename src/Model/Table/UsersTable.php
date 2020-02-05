@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -11,10 +9,12 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @property \App\Model\Table\EventsTable|\Cake\ORM\Association\HasMany $Events
+ *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\User|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
@@ -28,7 +28,7 @@ class UsersTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void
+    public function initialize(array $config)
     {
         parent::initialize($config);
 
@@ -37,7 +37,7 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Events', [
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'user_id'
         ]);
     }
 
@@ -47,28 +47,34 @@ class UsersTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator
+    public function validationDefault(Validator $validator)
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('username')
             ->maxLength('username', 50)
             ->requirePresence('username', 'create')
-            ->notEmptyString('username');
+            ->minLength('username', 4, 'Username must have at least 4 characters')
+            ->allowEmptyString('username', false);
 
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
+            ->minLength('password', 6, 'Password must have at least 6 characters')
             ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->allowEmptyString('password', false);
+
+
+        $validator->sameAs('password_match', 'password', 'Password Match failed');
 
         $validator
             ->scalar('name')
             ->maxLength('name', 80)
-            ->allowEmptyString('name');
+            ->minLength('name', 3, 'Name must have at least 6 characters')
+            ->allowEmptyString('name', false);
 
         $validator
             ->boolean('adm')
@@ -84,9 +90,17 @@ class UsersTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules): RulesChecker
+    public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));
+
+        $rules->add(function($entity) {
+            $data = $entity->extract($this->schema()->columns(), true);
+            $validator = $this->validator('default');
+            $errors = $validator->errors($data, $entity->isNew());
+            $entity->errors($errors);
+            return empty($errors);
+        });
 
         return $rules;
     }

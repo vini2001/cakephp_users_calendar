@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\UsersTable;
@@ -17,16 +15,16 @@ class UsersTableTest extends TestCase
      *
      * @var \App\Model\Table\UsersTable
      */
-    protected $Users;
+    public $Users;
 
     /**
      * Fixtures
      *
      * @var array
      */
-    protected $fixtures = [
+    public $fixtures = [
         'app.Users',
-        'app.Event',
+        'app.Events'
     ];
 
     /**
@@ -34,7 +32,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
         $config = TableRegistry::getTableLocator()->exists('Users') ? [] : ['className' => UsersTable::class];
@@ -46,7 +44,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    public function tearDown()
     {
         unset($this->Users);
 
@@ -58,7 +56,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize(): void
+    public function testInitialize()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -68,7 +66,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function testValidationDefault(): void
+    public function testValidationDefault()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -78,7 +76,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function testBuildRules(): void
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
