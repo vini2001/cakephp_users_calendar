@@ -2,6 +2,7 @@
 
 .input {
 	margin-right: 20px;
+	width: 300px;
 }
 
 .rowForm {
@@ -97,6 +98,18 @@ caption {
 	border: 1px solid #b5dbdc;
 	color: #009aaf;
 	text-decoration: none;
+}
+
+.event-invited {
+	background: #aaeecc;
+}
+
+.reject-invite{
+	color: red;
+}
+
+.accept-invite{
+	color: green;
 }
 
 .event:hover {
@@ -212,4 +225,102 @@ a:hover {
   border-top: 4px solid #07d;
   border-right: 4px solid transparent;
   animation: spinner .6s linear infinite;
+}
+
+
+/* USERS LIST */
+
+#users_div {
+	padding-right: 10px;
+	padding-left: 5px;
+	background-color: #fff;
+}
+
+#users_div > ul > li {
+	list-style-type: none;
+	border-bottom: 1px solid #ccc;
+	margin: 0px !important;
+	padding: 5px 10px 5px 10px;
+}
+
+#users_div > ul {
+	margin: 0px !important;
+	padding: 0px !important;
+}
+
+.checkbox-list {
+	margin-right: 10px;
+}
+
+.box-container {
+	top: 100px;
+	left: 50%;
+	margin-left: -150px;
+	position: fixed;
+	border-radius: 4px;
+	background-color: #fafafa;
+	width: 300px;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.close {
+	position: absolute;
+	right: 0;
+  color: #aaa;
+  font-size: 20px;
+	margin-top: -7px;
+	margin-right: 5px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.box-title {
+	width: 300px;
+	height: 30px;
+	top: 0px;
+	background-color: rgba(23, 112, 207, 1);	;
+	border-radius: 4px 4px 0 0;
+	color: white;
+	padding: 5px 0 0 10px;
+	display: flex;
+}
+
+.box-submit {
+	width: 300px;
+	background-color: rgba(23, 112, 207, 0.9);
+	color: white;
+}
+
+.box-submit:hover{
+	cursor: pointer;
+	background-color: rgba(23, 112, 207, 1);
+}
+
+.box {
+	margin-top: 0px;
+	width: 300px;
+  padding: 10px 0px 0px 0px;
+  color: rgb(116, 124, 142);
+  font-size: 15px;
+  overflow: auto;
+  min-height: 100px;
+	max-height: 200px;
+	overflow-y: visible;
 }

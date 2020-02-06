@@ -186,12 +186,125 @@
           $response[] = $event;
         }
 
-        /*$events = array();
-        $events[] = $firstDay;
-        $events[] = $lastDay;
-        echo json_encode($events);*/
+        return $response;
+      }
+
+      public function getInvitedEvents($firstDay, $lastDay){
+        $firstDay = $firstDay['year'].'-'.$firstDay['month'].'-'.$firstDay['day'] . ' 00:00:00';
+        $lastDay = $lastDay['year'].'-'.$lastDay['month'].'-'.$lastDay['day'] . ' 23:59:59';
+        $events = array();
+
+        $user_id = $this->controller->Auth->user('id');
+        $adm = $this->controller->Auth->user('adm');
+
+        $this->controller->loadModel('Events');
+        $this->controller->loadModel('Invitation');
+        $this->controller->loadModel('Users');
+
+        $conditions = [
+          'Events.date >= '=>$firstDay,
+          'Events.date <= '=>$lastDay,
+          'Invitation.id_user'=>$user_id
+        ];
+
+        $fields = [
+          'id' => 'Events.id',
+          'date' => 'Events.date',
+          'title' => 'Events.title',
+          'user_id' => 'Events.user_id',
+          'invitedBy' => 'uCreator.name',
+          'accepted' => 'Invitation.accepted'
+        ];
+
+        if($adm){
+          $fields['user_name'] = 'Users.name';
+        }
+
+        $events = $this->controller->Invitation->find('all',[
+          'fields'=>$fields,
+          'conditions'=>$conditions,
+          'order'=>['date'=>'asc'],
+          'contain' => ['Users']
+        ])->join([
+            'table' => 'events',
+            'alias' => 'Events',
+            'type' => 'INNER',
+            'conditions' => [
+              'Events.id' => new \Cake\Database\Expression\IdentifierExpression('Invitation.id_event')
+            ],
+        ])->join([
+            'table' => 'users',
+            'alias' => 'uCreator',
+            'type' => 'INNER',
+            'conditions' => [
+              'uCreator.id' => new \Cake\Database\Expression\IdentifierExpression('Events.user_id')
+            ],
+        ]);
+
+        $response = array();
+        foreach ($events as $key => $event) {
+          $dateValue = strtotime($event["date"]);
+          $event["year"] = date("Y", $dateValue);
+          $event["month"] = date("m", $dateValue);
+          $event["day"] = date("d", $dateValue);
+          $event["time"] = date("H:i:s", $dateValue);
+          $response[] = $event;
+        }
 
         return $response;
+      }
+
+      public function getUsers(){
+        $user_id = $this->controller->Auth->user('id');
+
+        $this->controller->loadModel('Users');
+        $this->controller->loadModel('Invitation');
+
+        $conditions = [
+          'Users.id <> '=> $user_id
+        ];
+
+        $users = $this->controller->Users->find('all',[
+          'conditions'=>$conditions,
+          'order'=>['name'=>'asc']
+        ]);
+
+        foreach ($users as $key => $user) {
+          $events_ids = $this->controller->Invitation->find('all',[
+            'fields' => ['id_event'],
+            'conditions'=>[
+              'id_user'=>$user["id"]
+            ]
+          ]);
+          $user["events"] = [];
+          foreach ($events_ids as $key => $ev) {
+            $user["events"][] = $ev["id_event"];
+          }
+        }
+
+        return $users;
+      }
+
+      public function acceptInvitat($eventId){
+
+        $this->controller->loadModel('Invitation');
+        $user_id = $this->controller->Auth->user('id');
+
+        $conditions = [
+          'id_event'=>$eventId,
+          'id_user'=>$user_id
+        ];
+
+        $invitations = $this->controller->Invitation->find('all',[
+          'conditions'=>$conditions
+        ]);
+
+        foreach ($invitations as $key => $item) {
+          $invitation = $item;
+        }
+
+        $invitation->accepted = 1;
+        $this->controller->Invitation->save($invitation);        
       }
 
 

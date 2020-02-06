@@ -39,6 +39,12 @@ class EventsTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id'
         ]);
+
+        $this->hasMany('Invitation', [
+            'dependent' => true,
+            'cascadeCallbacks' => true,
+            'foreignKey' => 'id_event'
+        ]);
     }
 
     /**

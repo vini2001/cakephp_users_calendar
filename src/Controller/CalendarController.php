@@ -13,12 +13,16 @@
 
         $days = $this->Calendar->getDaysArray($plusMonths);
         $events = $this->Calendar->getEvents($days[0], $days[sizeof($days) - 1]);
-
+        $invitedEvents = $this->Calendar->getInvitedEvents($days[0], $days[sizeof($days) - 1]);
         $today = $this->Calendar->getMonthStr($plusMonths);
+        $users = $this->Calendar->getUsers();
+
         $this->set('plusMonths',$plusMonths);
         $this->set('days',$days);
         $this->set('today', $today);
         $this->set('events', $events);
+        $this->set('invitedEvents', $invitedEvents);
+        $this->set('users', $users);
       }
 
       public function add(){
@@ -59,6 +63,44 @@
           ->withType('application/json')
           ->withStringBody(json_encode([
             'status' => 200
+          ]));
+      }
+
+      public function acceptInvitation() {
+        $this->loadComponent('Calendar');
+        $id = $this->request->getData('id');
+
+        $this->Calendar->acceptInvitat($id);
+
+
+       return $this->response
+        ->withType('application/json')
+        ->withStringBody(json_encode([
+          'status' => 200
+        ]));
+      }
+
+      public function invite(){
+          $request = json_decode($this->request->getData('request'));
+
+          $this->loadModel('Events');
+          $this->loadModel('Invitation');
+
+          $data = [];
+          foreach ($request->users as $key => $user_id) {
+            $data[] = [
+              'id_event' => $request->id_event,
+              'id_user' => $user_id
+            ];
+          }
+
+          $invitations = $this->Invitation->newEntities($data);
+          $result = $this->Invitation->saveMany($invitations);
+
+         return $this->response
+          ->withType('application/json')
+          ->withStringBody(json_encode([
+            'event' => $result
           ]));
       }
 

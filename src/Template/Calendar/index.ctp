@@ -31,7 +31,12 @@
   <script>
     var deleteURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "delete"]); ?>';
     var addURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "add"]); ?>';
-    var csrfToken = <?= json_encode($this->request->getParam('_csrfToken')) ?>
+    var inviteURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "invite"]); ?>';
+    var acceptURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "acceptInvitation"]); ?>';
+    var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';
+    var users = JSON.parse('<?= json_encode($users) ?>');
+    var invitedEvents = JSON.parse('<?= json_encode($invitedEvents) ?>');
+    console.log(JSON.stringify(invitedEvents));
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <?php echo $this->Html->script('calendar'); ?>
@@ -44,8 +49,29 @@
     <div class="input"> <?php echo $this->Form->control("date", ["type" => "datetime-local", "id" => "edt_date"]); ?> </div>
   </div>
   <div class="row"> <?php echo $this->Form->Button("Add", ["id" => "addEvent"]); ?> </div>
-
   <br/>
+
+  <div class="modal" id="boxusers">
+    <div class="box-container">
+      <span class="box-title"> Invite Users <span class="close">&times;</span> </span>
+      <div id="users_div" class="box">
+        <ul>
+          <?php
+            foreach ($users as $key => $user) {
+              ?>
+              <li>
+                <input id="user_<?= $user["id"] ?>" class="checkbox-list" type="checkbox"/>
+                <?= $user["name"] ?>
+              </li>
+              <?php
+            }
+          ?>
+        </ul>
+      </div>
+      <span id="btn_invite" class="box-submit btn"> Send invite </span>
+    </div>
+  </div>
+
 
   <table id="calendar">
     <caption>
@@ -69,6 +95,7 @@
           <div class="date"><?php echo $dayMap["day"]; ?></div>
           <div id="div_ev_<?= $dayMap["day"] ?>_<?= $dayMap["month"] ?>">
             <?php getEvents($this, $dayMap, $events); ?>
+            <?php getEvents($this, $dayMap, $invitedEvents); ?>
           </div>
         </td>
         <?php
@@ -84,6 +111,20 @@
           "id" => ":::id",
           "title" => ":::title",
           "time" => ":::time"
+      ];
+      if($is_adm) $ev["user_name"] = ":::user_name";
+      echo $this->element('eventContainer', ["ev" => $ev]);
+    ?>
+  </script>
+
+  <script type="text/template" id="template-event-invited">
+    <?php
+      $ev = [
+          "id" => ":::id",
+          "title" => ":::title",
+          "time" => ":::time",
+          "invitedBy" => ":::invitedBy",
+          "accepted" => "1"
       ];
       if($is_adm) $ev["user_name"] = ":::user_name";
       echo $this->element('eventContainer', ["ev" => $ev]);
