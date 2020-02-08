@@ -35,9 +35,9 @@
             if($this->Users->save($user))
               return $this->redirect(['action' => 'index']);
 
-            if ($user->errors()) {
+            if ($user->getErrors()) {
               $error_msg = [];
-                foreach($user->errors() as $key => $errors){
+                foreach($user->getErrors() as $key => $errors){
                     if(is_array($errors)){
                         foreach($errors as $key2 => $error){
                             $error_msg[$key]    =   $error;
@@ -80,9 +80,9 @@
             if($users_table->save($users))
               return $this->redirect(['action' => 'index']);
 
-              if ($users->errors()) {
+              if ($users->getErrors()) {
                 $error_msg = [];
-                  foreach($users->errors() as $key => $errors){
+                  foreach($users->getErrors() as $key => $errors){
                       if(is_array($errors)){
                           foreach($errors as $key2 => $error){
                               $error_msg[$key]    =   $error;
