@@ -112,6 +112,10 @@ caption {
 	color: green;
 }
 
+.remove-invite{
+	color: red;
+}
+
 .event:hover {
   background: #c4e2f2;
 	cursor: pointer;

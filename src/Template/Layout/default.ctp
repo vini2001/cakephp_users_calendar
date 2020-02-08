@@ -46,7 +46,7 @@ $cakeDescription = 'SolarQuotes Calendar';
             <?php } ?>
         </div>
         <div class="top-nav-menu">
-            <?php if($loggedIn){
+            <?php if($loggedIn && $is_adm){
               echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
               echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
             }?>

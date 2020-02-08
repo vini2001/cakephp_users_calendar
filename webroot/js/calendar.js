@@ -3,12 +3,9 @@ $(document).on('click', '.delete', function(e) {
 
   var id = this.id;
 
-  $('html').css({
-      'overflow': 'hidden',
-      'height': '100%'
-  });
 
   $('#ev_'+id).addClass('spinner');
+  freezeScroll();
 
   $.ajax({
     type:'post',
@@ -17,19 +14,15 @@ $(document).on('click', '.delete', function(e) {
     data:'id='+id,
     dataType: 'json',
     success: function(result){
-      $('html').css({
-          'overflow': 'auto',
-          'height': 'auto'
-      });
+      unfreezeScroll();
       $('#ev_'+id).remove();
     },
     error: function(xhr, status, error) {
-      var err = eval("(" + xhr.responseText + ")");
       $('#ev_'+id).removeClass('spinner');
-      alert(xhr.responseText);
-      alert(err.Message);
-      alert(status);
-      alert(error);
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
     }
   });
   return false;
@@ -39,12 +32,8 @@ $(document).on('click', '.accept-invite', function(e) {
 
   var id = this.id;
 
-  $('html').css({
-      'overflow': 'hidden',
-      'height': '100%'
-  });
-
   $('#ev_'+id).addClass('spinner');
+  freezeScroll();
 
   $.ajax({
     type:'post',
@@ -54,19 +43,48 @@ $(document).on('click', '.accept-invite', function(e) {
     dataType: 'json',
     success: function(result){
       $('#ev_'+id).removeClass('spinner');
-      $('html').css({
-          'overflow': 'auto',
-          'height': 'auto'
-      });
+      unfreezeScroll();
       $('#ev_'+id).remove();
       var event = getEvent(parseInt(id));
       addEventInvitedCard(event.id, event.title, event.date, event.invitedBy);
     },
     error: function(xhr, status, error) {
       $('#ev_'+id).removeClass('spinner');
-      alert(xhr.responseText);
-      alert(status);
-      alert(error);
+      console.log(JSON.stringify(errorBody));
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
+    }
+  });
+  return false;
+});
+
+$(document).on('click', '.reject-invite', function(e) {
+
+  var id = this.id;
+
+
+  $('#ev_'+id).addClass('spinner');
+  freezeScroll();
+
+  $.ajax({
+    type:'post',
+    headers: { 'X-CSRF-Token': csrfToken },
+    url: rejectURL,
+    data:'id='+id,
+    dataType: 'json',
+    success: function(result){
+      unfreezeScroll();
+      $('#ev_'+id).removeClass('spinner');
+      $('#ev_'+id).remove();
+    },
+    error: function(xhr, status, error) {
+      $('#ev_'+id).removeClass('spinner');
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
     }
   });
   return false;
@@ -85,7 +103,7 @@ $(document).on('click', '.invite', function(e) {
   modal_users = document.getElementById('boxusers');
   modal_users.style.display = "block";
   $('#users_div > ul > li > input').each(function () {
-    var id_user = this.id.substring(5);
+    var id_user = this.id.substring("user_invite_".length);
     var user;
     users.forEach((item, index) => {
       if(item.id == id_user){
@@ -97,11 +115,50 @@ $(document).on('click', '.invite', function(e) {
     if(user.events.includes(parseInt(id_event))){
       this.disabled = true;
       this.checked = true;
+      $('#remove_invite_user_'+id_user).show();
     }else{
       this.disabled = false;
       this.checked = false;
+      $('#remove_invite_user_'+id_user).hide();
     }
   });
+});
+
+$(document).on('click', '.remove-invite', function(e){
+  var id_user = this.id.substring("remove_invite_user_".length);
+
+
+  $('#ev_'+id_event).addClass('spinner');
+  freezeScroll();
+
+  $.ajax({
+    type:'post',
+    headers: { 'X-CSRF-Token': csrfToken },
+    url: removeInviteUrl,
+    data:'id_event='+id_event+'&id_user='+id_user,
+    dataType: 'json',
+    success: function(result){
+      $('#ev_'+id_event).removeClass('spinner');
+      $('#user_invite_'+id_user).removeAttr("disabled").prop("checked", false);
+      $('#remove_invite_user_'+id_user).hide();
+      users.forEach((user, j) => {
+        console.log(user.id+"|"+parseInt(id_user))
+        if(user.id == parseInt(id_user)){
+          user.events.splice( user.events.indexOf(id_event), 1 );
+          return;
+        }
+      })
+      unfreezeScroll();
+    },
+    error: function(xhr, status, error) {
+      $('#ev_'+id_event).removeClass('spinner');
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
+    }
+  });
+  return false;
 });
 
 $(document).on('click', '.close', function(e) {
@@ -118,7 +175,7 @@ $(document).on('click', '#btn_invite', function(e) {
   var users_ids = [];
   $('#users_div > ul > li > input').each(function () {
     if(this.checked && !this.disabled) {
-      var userId = this.id.substring(5);
+      var userId = this.id.substring("user_invite_".length);
       users_ids.push(userId);
     }
   });
@@ -129,6 +186,7 @@ $(document).on('click', '#btn_invite', function(e) {
     id_event: id_event
   };
 
+  freezeScroll();
   $('#addEvent').addClass('spinner');
 
   $.ajax({
@@ -139,10 +197,7 @@ $(document).on('click', '#btn_invite', function(e) {
     dataType: 'json',
     success: function(result){
       $('#addEvent').removeClass('spinner');
-      $('html').css({
-          'overflow': 'auto',
-          'height': 'auto'
-      });
+      unfreezeScroll();
       alert('Invitations sent successfuly');
 
       users_ids.forEach((item, index) => { //I'm aware it would be better if I just request from the server which users are already invited to the event when click on the event, but I still have somethings to do, maybe I'll change it later, is it necessary?
@@ -156,9 +211,10 @@ $(document).on('click', '#btn_invite', function(e) {
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
-      alert(xhr.responseText);
-      alert(status);
-      alert(error);
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
     }
   });
 
@@ -231,6 +287,7 @@ $(document).on('click', '#addEvent', function(e) {
   }
 
   $('#addEvent').addClass('spinner');
+  freezeScroll();
 
   $.ajax({
     type:'post',
@@ -240,21 +297,17 @@ $(document).on('click', '#addEvent', function(e) {
     dataType: 'json',
     success: function(result){
       $('#addEvent').removeClass('spinner');
-      $('html').css({
-          'overflow': 'auto',
-          'height': 'auto'
-      });
+      unfreezeScroll();
 
       var id = result.id;
       addEventCard(id, title, date);
     },
     error: function(xhr, status, error) {
-      var err = eval("(" + xhr.responseText + ")");
       $('#addEvent').removeClass('spinner');
-      alert(xhr.responseText);
-      alert(err.Message);
-      alert(status);
-      alert(error);
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          alert(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
     }
   });
 
@@ -278,4 +331,18 @@ function getTimestampFromDay(day){
   var d = day.day;
   var month =  day.month;
   return day.year + "-" + month + "-" + d + "T" + day.time;
+}
+
+function freezeScroll(){
+  $('html').css({
+      'overflow': 'hidden',
+      'height': '100%'
+  });
+}
+
+function unfreezeScroll(){
+  $('html').css({
+      'overflow': 'auto',
+      'height': 'auto'
+  });
 }

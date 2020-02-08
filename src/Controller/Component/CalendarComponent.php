@@ -304,9 +304,59 @@
         }
 
         $invitation->accepted = 1;
-        $this->controller->Invitation->save($invitation);        
+        $this->controller->Invitation->save($invitation);
       }
 
+      public function removeInvitation($id_event, $id_user){
+        $this->controller->loadModel('Invitation');
+        $user_id_owner_event = $this->controller->Auth->user('id');
+
+        $conditions = [
+          'id_event'=>$id_event,
+          'id_user'=>$id_user,
+          'Events.user_id'=>$user_id_owner_event
+        ];
+
+        $invitations = $this->controller->Invitation->find('all',[
+          'conditions'=>$conditions,
+          'contain'=>['Events']
+        ]);
+
+        foreach ($invitations as $key => $item) {
+          $invitation = $item;
+        }
+
+        if(isset($invitation)) {
+          $this->controller->Invitation->delete($invitation);
+          return true;
+        }
+        return false;
+      }
+
+      public function declineInvitation($eventId){
+
+        $this->controller->loadModel('Invitation');
+        $user_id = $this->controller->Auth->user('id');
+
+        $conditions = [
+          'id_event'=>$eventId,
+          'id_user'=>$user_id
+        ];
+
+        $invitations = $this->controller->Invitation->find('all',[
+          'conditions'=>$conditions
+        ]);
+
+        foreach ($invitations as $key => $item) {
+          $invitation = $item;
+        }
+
+        if(isset($invitation)) {
+          $this->controller->Invitation->delete($invitation);
+          return true;
+        }
+        return false;
+      }
 
   }
 

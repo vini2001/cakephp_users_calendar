@@ -54,16 +54,24 @@
       }
 
       public function delete(){
-          $id = $this->request->getData('id');
+          $user_id = $this->Auth->user('id');
+          $id_event = $this->request->getData('id');
           $this->loadModel('Events');
-          $event = $this->Events->get($id);
+          $event = $this->Events->get($id_event);
+
+          if($event->user_id != $user_id && !$this->Auth->user('adm'))
+            return $this->response
+             ->withType('application/json')
+             ->withStatus(401)
+             ->withStringBody(json_encode([
+               'error' => 'Unauthorized Request'
+             ]));
+
           $this->Events->delete($event);
 
-         return $this->response
-          ->withType('application/json')
-          ->withStringBody(json_encode([
-            'status' => 200
-          ]));
+          return $this->response
+           ->withType('application/json')
+           ->withStringBody(json_encode([]));
       }
 
       public function acceptInvitation() {
@@ -80,11 +88,58 @@
         ]));
       }
 
+      public function declineInvitation() {
+        $this->loadComponent('Calendar');
+        $id = $this->request->getData('id');
+
+        if($this->Calendar->declineInvitation($id)){
+          return $this->response
+           ->withType('application/json')
+           ->withStringBody(json_encode([]));
+        }else{
+          return $this->response
+           ->withType('application/json')
+           ->withStatus(401)
+           ->withStringBody(json_encode([
+             'error' => 'Unauthorized Request'
+           ]));
+        }
+      }
+
+      public function removeInvite(){
+        $this->loadComponent('Calendar');
+        $id_event = $this->request->getData('id_event');
+        $id_user = $this->request->getData('id_user');
+
+        if($this->Calendar->removeInvitation($id_event, $id_user)){
+          return $this->response
+           ->withType('application/json')
+           ->withStringBody(json_encode([]));
+        }else{
+          return $this->response
+           ->withType('application/json')
+           ->withStatus(401)
+           ->withStringBody(json_encode([
+             'error' => 'Unauthorized Request'
+           ]));
+        }
+      }
+
       public function invite(){
           $request = json_decode($this->request->getData('request'));
 
           $this->loadModel('Events');
           $this->loadModel('Invitation');
+          $event = $this->Events->get($request->id_event);
+          $user_id = $this->Auth->user('id');
+
+          if($event->user_id != $user_id && !$this->Auth->user('adm'))
+            return $this->response
+             ->withType('application/json')
+             ->withStatus(401)
+             ->withStringBody(json_encode([
+               'error' => 'Unauthorized Request'
+             ]));
 
           $data = [];
           foreach ($request->users as $key => $user_id) {

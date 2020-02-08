@@ -33,6 +33,8 @@
     var addURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "add"]); ?>';
     var inviteURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "invite"]); ?>';
     var acceptURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "acceptInvitation"]); ?>';
+    var rejectURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "declineInvitation"]); ?>';
+    var removeInviteUrl = '<?php echo Router::url(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';
     var users = JSON.parse('<?= json_encode($users) ?>');
     var invitedEvents = JSON.parse('<?= json_encode($invitedEvents) ?>');
@@ -60,8 +62,9 @@
             foreach ($users as $key => $user) {
               ?>
               <li>
-                <input id="user_<?= $user["id"] ?>" class="checkbox-list" type="checkbox"/>
+                <input id="user_invite_<?= $user["id"] ?>" class="checkbox-list" type="checkbox"/>
                 <?= $user["name"] ?>
+                <i id="remove_invite_user_<?= $user["id"] ?>" class="fa fa-close align-right-event remove-invite"></i>
               </li>
               <?php
             }

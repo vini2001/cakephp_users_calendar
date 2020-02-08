@@ -56,7 +56,7 @@ class AppController extends Controller
             ],
             'authError' => false,
             'loginAction' => ['controller' => 'Authexs', 'action' => 'login'],
-            'loginRedirect' => ['controller' => 'Users', 'action' => 'index'],
+            'loginRedirect' => ['controller' => 'Calendar', 'action' => 'index'],
             'logoutRedirect' => ['controller' => 'Authexs', 'action' => 'login']
          ]);
 
