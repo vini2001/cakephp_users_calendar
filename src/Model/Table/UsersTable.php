@@ -96,7 +96,7 @@ class UsersTable extends Table
 
         $rules->add(function($entity) {
             $data = $entity->extract($this->schema()->columns(), true);
-            $validator = $this->validator('default');
+            $validator = $this->getValidator('default');
             $errors = $validator->errors($data, $entity->isNew());
             $entity->errors($errors);
             return empty($errors);
