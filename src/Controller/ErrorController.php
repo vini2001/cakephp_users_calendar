@@ -12,9 +12,14 @@
  * @since         3.3.4
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller;
 
-use Cake\Event\Event;
+ namespace App\Controller;
+ use App\Controller\AppController;
+ use Cake\ORM\TableRegistry;
+ use Cake\Datasource\ConnectionManager;
+ use Cake\Auth\DefaultPasswordHasher;
+ use Cake\Event\Event;
+
 
 /**
  * Error Handling Controller
@@ -35,15 +40,21 @@ class ErrorController extends AppController
         ]);
     }
 
+    public function error404(){
+      $this->set('loggedIn',true);
+      $this->set('name', "Error");
+      $this->set('is_adm', false);
+    }
+
     /**
      * beforeFilter callback.
      *
      * @param \Cake\Event\Event $event Event.
      * @return \Cake\Http\Response|null|void
      */
-    public function beforeFilter(Event $event)
-    {
-    }
+     public function beforeFilter(Event $event) {
+         parent::beforeFilter($event);
+     }
 
     /**
      * beforeRender callback.

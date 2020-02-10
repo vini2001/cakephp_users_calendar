@@ -310,14 +310,18 @@
       public function removeInvitation($id_event, $id_user){
         $this->controller->loadModel('Invitation');
         $user_id_owner_event = $this->controller->Auth->user('id');
+        $adm = $this->controller->Auth->user('adm');
 
         $conditions = [
           'id_event'=>$id_event,
-          'id_user'=>$id_user,
-          'Events.user_id'=>$user_id_owner_event
+          'id_user'=>$id_user
         ];
 
         $invitations = $this->controller->Invitation->find('all',[
+          'fields' => [
+            'Invitation.id', 'Invitation.id_user', 'Invitation.id_event',
+            'Events.user_id'
+          ],
           'conditions'=>$conditions,
           'contain'=>['Events']
         ]);
@@ -325,6 +329,8 @@
         foreach ($invitations as $key => $item) {
           $invitation = $item;
         }
+
+        if($user_id_owner_event != $invitation["user_id"] && !$adm) return false;
 
         if(isset($invitation)) {
           $this->controller->Invitation->delete($invitation);
@@ -356,6 +362,24 @@
           return true;
         }
         return false;
+      }
+
+      public function errorOut($error = "Internal server error", $status = 500){
+        return $this->controller->response
+         ->withType('application/json')
+         ->withStatus($status)
+         ->withStringBody(json_encode([
+           'error' => $error
+         ]));
+      }
+
+      public function errorUnauthorized(){
+        return $this->controller->response
+         ->withType('application/json')
+         ->withStatus(401)
+         ->withStringBody(json_encode([
+           'error' => 'Unauthorized request'
+         ]));
       }
 
   }

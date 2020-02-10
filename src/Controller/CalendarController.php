@@ -9,7 +9,11 @@
    class CalendarController extends AppController{
 
       public function index($plusMonths = 0){
-        $this->loadComponent('Calendar');
+
+        if(!$this->App->isInt($plusMonths)){
+          $this->render('/Error/error404');
+          return;
+        }
 
         $days = $this->Calendar->getDaysArray($plusMonths);
         $events = $this->Calendar->getEvents($days[0], $days[sizeof($days) - 1]);
@@ -26,9 +30,22 @@
       }
 
       public function add(){
+
         if($this->request->is('post')){
            $title = $this->request->getData('title');
            $date = $this->request->getData('date');
+
+           $title = ltrim($title);
+           if(strlen($title) == 0)
+            return $this->App->errorOut("The title is empyt", 400);
+
+           date_default_timezone_set('Australia/Sydney');
+           $stamp = strtotime($date); // get unix timestamp
+           $time_in_ms = $stamp*1000;
+
+           if(microtime(true)*1000 > $time_in_ms)
+              return $this->App->errorOut("You cannot add events in the past", 400);
+
            $user_id = $this->Auth->user('id');
 
            $this->loadModel('Events');
@@ -44,11 +61,7 @@
                 'id' => $ev->id
               ]));
            }else{
-             return $this->response
-              ->withType('application/json')
-              ->withStringBody(json_encode([
-                'status' => 400
-              ]));
+             return $this->App->errorOut();
            }
         }
       }
@@ -60,12 +73,7 @@
           $event = $this->Events->get($id_event);
 
           if($event->user_id != $user_id && !$this->Auth->user('adm'))
-            return $this->response
-             ->withType('application/json')
-             ->withStatus(401)
-             ->withStringBody(json_encode([
-               'error' => 'Unauthorized Request'
-             ]));
+            return $this->App->errorUnauthorized();
 
           $this->Events->delete($event);
 
@@ -75,7 +83,6 @@
       }
 
       public function acceptInvitation() {
-        $this->loadComponent('Calendar');
         $id = $this->request->getData('id');
 
         $this->Calendar->acceptInvitat($id);
@@ -89,7 +96,6 @@
       }
 
       public function declineInvitation() {
-        $this->loadComponent('Calendar');
         $id = $this->request->getData('id');
 
         if($this->Calendar->declineInvitation($id)){
@@ -97,17 +103,11 @@
            ->withType('application/json')
            ->withStringBody(json_encode([]));
         }else{
-          return $this->response
-           ->withType('application/json')
-           ->withStatus(401)
-           ->withStringBody(json_encode([
-             'error' => 'Unauthorized Request'
-           ]));
+          return $this->App->errorUnauthorized();
         }
       }
 
       public function removeInvite(){
-        $this->loadComponent('Calendar');
         $id_event = $this->request->getData('id_event');
         $id_user = $this->request->getData('id_user');
 
@@ -116,12 +116,7 @@
            ->withType('application/json')
            ->withStringBody(json_encode([]));
         }else{
-          return $this->response
-           ->withType('application/json')
-           ->withStatus(401)
-           ->withStringBody(json_encode([
-             'error' => 'Unauthorized Request'
-           ]));
+          return $this->App->errorUnauthorized();
         }
       }
 
@@ -134,12 +129,7 @@
           $user_id = $this->Auth->user('id');
 
           if($event->user_id != $user_id && !$this->Auth->user('adm'))
-            return $this->response
-             ->withType('application/json')
-             ->withStatus(401)
-             ->withStringBody(json_encode([
-               'error' => 'Unauthorized Request'
-             ]));
+            return $this->App->errorUnauthorized();
 
           $data = [];
           foreach ($request->users as $key => $user_id) {
@@ -161,6 +151,7 @@
 
       public function beforeFilter(Event $event) {
           parent::beforeFilter($event);
+          $this->loadComponent('Calendar');
       }
 
 

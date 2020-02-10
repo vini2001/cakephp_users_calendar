@@ -21,7 +21,7 @@ $(document).on('click', '.delete', function(e) {
       $('#ev_'+id).removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });
@@ -53,7 +53,7 @@ $(document).on('click', '.accept-invite', function(e) {
       console.log(JSON.stringify(errorBody));
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });
@@ -83,7 +83,7 @@ $(document).on('click', '.reject-invite', function(e) {
       $('#ev_'+id).removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });
@@ -149,12 +149,13 @@ $(document).on('click', '.remove-invite', function(e){
         }
       })
       unfreezeScroll();
+      snackbar("User was successfuly uninvited");
     },
     error: function(xhr, status, error) {
       $('#ev_'+id_event).removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });
@@ -198,7 +199,7 @@ $(document).on('click', '#btn_invite', function(e) {
     success: function(result){
       $('#addEvent').removeClass('spinner');
       unfreezeScroll();
-      alert('Invitations sent successfuly');
+      snackbar('Invitations sent successfuly');
 
       users_ids.forEach((item, index) => { //I'm aware it would be better if I just request from the server which users are already invited to the event when click on the event, but I still have somethings to do, maybe I'll change it later, is it necessary?
         users.forEach((user, j) => {
@@ -213,7 +214,7 @@ $(document).on('click', '#btn_invite', function(e) {
       $('#addEvent').removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });
@@ -277,12 +278,12 @@ $(document).on('click', '#addEvent', function(e) {
   var title = $('#edt_title').val();
 
   if(title.length == 0){
-    alert("Title is empty");
+    snackbarError("Title is empty");
     return false;
   }
 
   if(date.length == 0){
-    alert("You need to choose the date and time");
+    snackbarError("You need to choose the date and time");
     return false;
   }
 
@@ -299,6 +300,8 @@ $(document).on('click', '#addEvent', function(e) {
       $('#addEvent').removeClass('spinner');
       unfreezeScroll();
 
+      snackbar("The event has been added successfuly");
+
       var id = result.id;
       addEventCard(id, title, date);
     },
@@ -306,7 +309,7 @@ $(document).on('click', '#addEvent', function(e) {
       $('#addEvent').removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
-          alert(errorBody.error);
+          snackbarError(errorBody.error);
       }else console.log(JSON.stringify(errorBody));
     }
   });

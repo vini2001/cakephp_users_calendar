@@ -36,8 +36,17 @@ $cakeDescription = 'SolarQuotes Calendar';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <?php echo $this->Html->script('app'); ?>
 </head>
 <body>
+
+  <div id="snackbar-container">
+    <div class="snackbar" align="center">
+      <span id="snackbarText"> Unauthorized Request </span>
+    </div>
+  </div>
+
     <nav class="top-nav">
         <div class="top-nav-title">
             <a> <?php if(isset($name)) echo $name; ?> </a>
@@ -65,5 +74,10 @@ $cakeDescription = 'SolarQuotes Calendar';
     </main>
     <footer>
     </footer>
+
+
+
 </body>
+
+
 </html>

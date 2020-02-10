@@ -208,3 +208,24 @@ th {
 .logout {
   color: red;
 }
+
+#snackbar-container {
+  display: none;
+}
+
+.snackbar {
+  position: fixed;
+  top: 0px;;
+  width: 100%;
+  background-color: rgba(23, 112, 207, 1);
+  padding: 10px;
+  z-index: 100;
+}
+
+.sbError {
+  background-color: rgba(230, 79, 98, 1) !important;
+}
+
+#snackbarText {
+  color: white;
+}

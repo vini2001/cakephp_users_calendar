@@ -76,9 +76,8 @@ class AppController extends Controller
         //$this->loadComponent('FormProtection');
     }
 
-    /*public function beforeRender(Event $event){
-       if (!array_key_exists('_serialize', $this->viewVars)) {
-          if(in_array($this->response->type(), ['application/json', 'application/xml'])) $this->set('_serialize', true);
-       }
-    }*/
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->loadComponent('App');
+    }
 }

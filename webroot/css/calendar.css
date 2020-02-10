@@ -183,11 +183,6 @@ a {
   padding: 2px 12px !important;
 }
 
-a:hover {
-  background-color: #ddd !important;
-  color: black !important;
-}
-
 .previous {
   background-color: #f1f1f1 !important;
   color: black !important;
@@ -229,6 +224,7 @@ a:hover {
   border-top: 4px solid #07d;
   border-right: 4px solid transparent;
   animation: spinner .6s linear infinite;
+	z-index: 2000;
 }
 
 
