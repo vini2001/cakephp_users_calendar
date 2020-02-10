@@ -320,7 +320,7 @@
         $invitations = $this->controller->Invitation->find('all',[
           'fields' => [
             'Invitation.id', 'Invitation.id_user', 'Invitation.id_event',
-            'Events.user_id'
+            'id_owner'=>'Events.user_id'
           ],
           'conditions'=>$conditions,
           'contain'=>['Events']
@@ -330,7 +330,7 @@
           $invitation = $item;
         }
 
-        if($user_id_owner_event != $invitation["user_id"] && !$adm) return false;
+        if($user_id_owner_event != $invitation["id_owner"] && !$adm) return false;
 
         if(isset($invitation)) {
           $this->controller->Invitation->delete($invitation);
