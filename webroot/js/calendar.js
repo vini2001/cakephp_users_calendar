@@ -212,6 +212,7 @@ $(document).on('click', '#btn_invite', function(e) {
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
+      unfreezeScroll();
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
           snackbarError(errorBody.error);
@@ -307,6 +308,7 @@ $(document).on('click', '#addEvent', function(e) {
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
+      unfreezeScroll();
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
           snackbarError(errorBody.error);
