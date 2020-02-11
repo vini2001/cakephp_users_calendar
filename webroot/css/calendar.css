@@ -1,6 +1,6 @@
 /* declare a 7 column grid on the table */
 
-.input {
+.inputAddEvent {
 	margin-right: 20px;
 	width: 300px;
 }
@@ -321,8 +321,8 @@ a {
   padding: 10px 0px 0px 0px;
   color: rgb(116, 124, 142);
   font-size: 15px;
-  overflow: auto;
   min-height: 100px;
 	max-height: 200px;
 	overflow-y: visible;
+	overflow-x: hidden;
 }

@@ -1,4 +1,49 @@
 
+
+$(document).on('click', '#exportDataLink', function(e) {
+  $('#exportDataModal').show();
+})
+
+$(document).on('click', '#btn_export_data', function(e) {
+  var start_export_date = $('#start_export_date').val();
+  var end_export_date = $('#end_export_date').val();
+
+  if(start_export_date.length == 0){
+    snackbarError("Start Date is empty");
+    return false;
+  }
+
+  if(end_export_date.length == 0){
+    snackbarError("End Date is empty");
+    return false;
+  }
+
+  $('#btn_export_data').addClass('spinner');
+
+  $.ajax({
+    type:'post',
+    headers: { 'X-CSRF-Token': csrfToken },
+    url: exportDataURL,
+    data:'startDate='+start_export_date+'&endDate='+end_export_date,
+    dataType: 'json',
+    success: function(result){
+      $('#btn_export_data').removeClass('spinner');
+      var url = result.file_url
+      snackbar("Downloading CSV file ...")
+      window.location = url;
+    },
+    error: function(xhr, status, error) {
+      $('#btn_export_data').removeClass('spinner');
+      console.log(JSON.stringify(xhr.responseText));
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          snackbarError(errorBody.error);
+      }
+    }
+  });
+
+})
+
 $(document).on('click', '.delete', function(e) {
 
   var id = this.id;
@@ -162,8 +207,12 @@ $(document).on('click', '.remove-invite', function(e){
   return false;
 });
 
-$(document).on('click', '.close', function(e) {
+$(document).on('click', '#closeBoxUsersModal', function(e) {
   modal_users.style.display = "none";
+});
+
+$(document).on('click', '#closeExportDataModal', function(e) {
+  $('#exportDataModal').hide();
 });
 
 window.onclick = function(event) {

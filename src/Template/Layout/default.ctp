@@ -55,10 +55,15 @@ $cakeDescription = 'SolarQuotes Calendar';
             <?php } ?>
         </div>
         <div class="top-nav-menu">
-            <?php if($loggedIn && $is_adm){
-              echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
-              echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
-            }?>
+            <?php
+              if($loggedIn && $is_adm){
+                echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
+                echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
+              }
+              if(isset($isAtCalendar) && $isAtCalendar){                
+                echo $this->Html->link('Export Data', "#", ["id" => "exportDataLink"]);
+              }
+            ?>
         </div>
         <div class="top-nav-links">
             <a target="_blank" href="https://www.solarquotes.com.au/">Website</a>

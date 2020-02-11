@@ -141,9 +141,9 @@
         return $days;
       }
 
-      public function getEvents($firstDay, $lastDay){
-        $firstDay = $firstDay['year'].'-'.$firstDay['month'].'-'.$firstDay['day'] . ' 00:00:00';
-        $lastDay = $lastDay['year'].'-'.$lastDay['month'].'-'.$lastDay['day'] . ' 23:59:59';
+      public function getEvents($firstDay, $lastDay, $startTime = '00:00:00', $endTime = '23:59:59'){
+        $firstDay = $firstDay['year'].'-'.$firstDay['month'].'-'.$firstDay['day'] . ' $startTime';
+        $lastDay = $lastDay['year'].'-'.$lastDay['month'].'-'.$lastDay['day'] . ' $endTime';
         $events = array();
 
         $user_id = $this->controller->Auth->user('id');
@@ -189,9 +189,9 @@
         return $response;
       }
 
-      public function getInvitedEvents($firstDay, $lastDay){
-        $firstDay = $firstDay['year'].'-'.$firstDay['month'].'-'.$firstDay['day'] . ' 00:00:00';
-        $lastDay = $lastDay['year'].'-'.$lastDay['month'].'-'.$lastDay['day'] . ' 23:59:59';
+      public function getInvitedEvents($firstDay, $lastDay, $startTime = '00:00:00', $endTime = '23:59:59'){
+        $firstDay = $firstDay['year'].'-'.$firstDay['month'].'-'.$firstDay['day'] . ' $startTime';
+        $lastDay = $lastDay['year'].'-'.$lastDay['month'].'-'.$lastDay['day'] . ' $endTime';
         $events = array();
 
         $user_id = $this->controller->Auth->user('id');

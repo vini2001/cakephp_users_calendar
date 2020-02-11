@@ -15,7 +15,9 @@
     var acceptURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "acceptInvitation"]); ?>';
     var rejectURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "declineInvitation"]); ?>';
     var removeInviteUrl = '<?php echo Router::url(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
+    var exportDataURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "exportCalendarData"]); ?>';
     var calendarElementURL = '<?php echo Router::url(["controller" => "Element", "action" => "calendar"]); ?>';
+
     var plusMonths = <?= $plusMonths ?>
 
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';
@@ -29,15 +31,15 @@
 <body>
 
   <div class="row">
-    <div class="input"> <?php echo $this->Form->control("title", ["type" => "text", "placeholder" => "Meeting with...", "id" => "edt_title"]); ?> </div>
-    <div class="input"> <?php echo $this->Form->control("date", ["type" => "datetime-local", "id" => "edt_date"]); ?> </div>
+    <div class="inputAddEvent"> <?php echo $this->Form->control("title", ["type" => "text", "placeholder" => "Meeting with...", "id" => "edt_title"]); ?> </div>
+    <div class="inputAddEvent"> <?php echo $this->Form->control("date", ["type" => "datetime-local", "id" => "edt_date"]); ?> </div>
   </div>
   <div class="row"> <?php echo $this->Form->Button("Add", ["id" => "addEvent"]); ?> </div>
   <br/>
 
   <div class="modal" id="boxusers">
     <div class="box-container">
-      <span class="box-title"> Invite Users <span class="close">&times;</span> </span>
+      <span class="box-title"> Invite Users <span id="closeBoxUsersModal" class="close">&times;</span> </span>
       <div id="users_div" class="box">
         <ul>
           <?php
@@ -54,6 +56,19 @@
         </ul>
       </div>
       <span id="btn_invite" class="box-submit btn"> Send invite </span>
+    </div>
+  </div>
+
+  <div class="modal" id="exportDataModal">
+    <div class="box-container">
+      <span class="box-title"> Export Data <span id="closeExportDataModal" class="close">&times;</span> </span>
+      <div class="box">
+        <div style="margin:10px;">
+          <?= $this->Form->control("From", ["type" => "datetime-local", "id" => "start_export_date"]); ?>
+          <?= $this->Form->control("Until", ["type" => "datetime-local", "id" => "end_export_date"]); ?>
+        </div>
+      </div>
+      <span id="btn_export_data" class="box-submit btn"> Export to CSV </span>
     </div>
   </div>
 

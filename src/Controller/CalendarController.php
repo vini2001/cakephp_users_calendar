@@ -5,13 +5,14 @@
    use Cake\Datasource\ConnectionManager;
    use Cake\Auth\DefaultPasswordHasher;
    use Cake\Event\Event;
+   use Cake\Routing\Router;
 
    class CalendarController extends AppController{
 
       public function index(){
 
         $plusMonths = 0;
-    
+
         $days = $this->Calendar->getDaysArray($plusMonths);
         $events = $this->Calendar->getEvents($days[0], $days[sizeof($days) - 1]);
         $invitedEvents = $this->Calendar->getInvitedEvents($days[0], $days[sizeof($days) - 1]);
@@ -24,6 +25,7 @@
         $this->set('events', $events);
         $this->set('invitedEvents', $invitedEvents);
         $this->set('users', $users);
+        $this->set('isAtCalendar', true);
       }
 
       public function add(){
@@ -144,6 +146,58 @@
           ->withStringBody(json_encode([
             'event' => $result
           ]));
+      }
+
+      public function exportCalendarData(){
+        $startDate = $this->request->getData('startDate');
+        $endDate = $this->request->getData('endDate');
+
+        $firstDate = array();
+        $dateValue = strtotime($startDate);
+        $firstDate["year"] = date("Y", $dateValue);
+        $firstDate["month"] = date("m", $dateValue);
+        $firstDate["day"] = date("d", $dateValue);
+        $firstDate["time"] = date("H:i:s", $dateValue);
+
+        $secondDate = array();
+        $dateValue = strtotime($endDate);
+        $secondDate["year"] = date("Y", $dateValue);
+        $secondDate["month"] = date("m", $dateValue);
+        $secondDate["day"] = date("d", $dateValue);
+        $secondDate["time"] = date("H:i:s", $dateValue);
+
+        $events = $this->Calendar->getEvents($firstDate, $secondDate, $firstDate["time"], $secondDate["time"]);
+        $invitedEvents = $this->Calendar->getInvitedEvents($firstDate, $secondDate, $firstDate["time"], $secondDate["time"]);
+
+        $name= "ExportedData.csv";
+
+        $file_path = ROOT . "/webroot/files/" . $name;
+
+        $content = "Subject,Start Date,Start Time,End Date,End Time,All day event,Description,Location\n";
+        foreach ($events as $key => $ev) {
+          $dateValue = strtotime($ev->date);
+          $date = date("Y-m-d,H:i", $dateValue);
+          $content .= "\"$ev->title\",$date,,,FALSE,,\n";
+        }
+
+        foreach ($invitedEvents as $key => $ev) {
+          if(!$ev->accepted) continue;
+          $dateValue = strtotime($ev->date);
+          $date = date("Y-m-d,H:i", $dateValue);
+          $content .= "\"$ev->title\",$date,,,FALSE,\"Invited by $ev->invitedBy\",\n";
+        }
+
+        $fp = fopen($file_path, "wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $file_path = Router::url('/') . "webroot/files/" . $name;
+
+       return $this->response
+        ->withType('application/json')
+        ->withStringBody(json_encode([
+          'file_url' => $file_path
+        ]));
       }
 
       public function beforeFilter(Event $event) {
