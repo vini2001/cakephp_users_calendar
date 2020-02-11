@@ -362,8 +362,10 @@ function nextMonth() {
   loadMonthCalendar();
 }
 
+var loading = 0;
 function loadMonthCalendar() {
-  $('#addEvent').addClass('spinner');
+  loading ++;
+  $('#calendarContainer').addClass('spinner');
   $.ajax({
     url: calendarElementURL,
     data: 'plusMonths='+plusMonths,
@@ -371,11 +373,13 @@ function loadMonthCalendar() {
     headers: { 'X-CSRF-Token': csrfToken },
     cache: false,
     success: function(html){
-      $('#addEvent').removeClass('spinner');
+      loading--;
+      if(loading == 0) $('#calendarContainer').removeClass('spinner');
       $("#calendarContainer").html(html);
     },
     error: function(xhr, status, error) {
-      $('#addEvent').removeClass('spinner');
+      loading--;
+      if(loading == 0) $('#calendarContainer').removeClass('spinner');
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
           snackbarError(errorBody.error);
