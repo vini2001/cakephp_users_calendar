@@ -72,7 +72,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 
      $routes->connect('/users/add', ['controller' => 'Users', 'action' => 'add']);
      $routes->connect('/users', ['controller' => 'Users', 'action' => 'index']);
-     $routes->connect('/calendar/:plusMonths', ['controller' => 'Calendar', 'action' => 'index'], ['pass' => ['plusMonths']]);
+     $routes->connect('/calendar/', ['controller' => 'Calendar', 'action' => 'index']);
      $routes->connect('/calendar/add', ['controller' => 'Calendar', 'action' => 'add']);
      $routes->connect('/calendar/delete', ['controller' => 'Calendar', 'action' => 'delete']);
      $routes->connect('/calendar/invite', ['controller' => 'Calendar', 'action' => 'invite']);

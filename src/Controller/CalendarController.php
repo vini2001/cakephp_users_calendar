@@ -8,13 +8,10 @@
 
    class CalendarController extends AppController{
 
-      public function index($plusMonths = 0){
+      public function index(){
 
-        if(!$this->App->isInt($plusMonths)){
-          $this->render('/Error/error404');
-          return;
-        }
-
+        $plusMonths = 0;
+    
         $days = $this->Calendar->getDaysArray($plusMonths);
         $events = $this->Calendar->getEvents($days[0], $days[sizeof($days) - 1]);
         $invitedEvents = $this->Calendar->getInvitedEvents($days[0], $days[sizeof($days) - 1]);

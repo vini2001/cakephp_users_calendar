@@ -351,3 +351,35 @@ function unfreezeScroll(){
       'height': 'auto'
   });
 }
+
+function previousMonth() {
+  plusMonths--;
+  loadMonthCalendar();
+}
+
+function nextMonth() {
+  plusMonths++;
+  loadMonthCalendar();
+}
+
+function loadMonthCalendar() {
+  $('#addEvent').addClass('spinner');
+  $.ajax({
+    url: calendarElementURL,
+    data: 'plusMonths='+plusMonths,
+    type:'post',
+    headers: { 'X-CSRF-Token': csrfToken },
+    cache: false,
+    success: function(html){
+      $('#addEvent').removeClass('spinner');
+      $("#calendarContainer").html(html);
+    },
+    error: function(xhr, status, error) {
+      $('#addEvent').removeClass('spinner');
+      var errorBody = JSON.parse(xhr.responseText);
+      if(errorBody.error != undefined){
+          snackbarError(errorBody.error);
+      }else console.log(JSON.stringify(errorBody));
+    }
+  })
+}
