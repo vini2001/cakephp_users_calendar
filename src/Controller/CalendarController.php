@@ -31,7 +31,7 @@
         $this->set('isAtCalendar', true);
 
         if($this->request->is('ajax')){
-          $this->viewPath = 'Element';
+          $this->viewBuilder()->setTemplatePath('Element');
           $this->render('calendar', 'ajax');
         }
 
