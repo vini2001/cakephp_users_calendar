@@ -24,7 +24,10 @@ $(document).on('click', '#btn_export_data', function(e) {
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: exportDataURL,
-    data:'startDate='+start_export_date+'&endDate='+end_export_date,
+    data: {
+      startDate: start_export_date,
+      endDate: end_export_date
+    },
     dataType: 'json',
     success: function(result){
       $('#btn_export_data').removeClass('spinner');
@@ -56,7 +59,9 @@ $(document).on('click', '.delete', function(e) {
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: deleteURL,
-    data:'id='+id,
+    data: {
+      id: id
+    },
     dataType: 'json',
     success: function(result){
       unfreezeScroll();
@@ -84,7 +89,9 @@ $(document).on('click', '.accept-invite', function(e) {
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: acceptURL,
-    data:'id='+id,
+    data: {
+      id: id
+    },
     dataType: 'json',
     success: function(result){
       $('#ev_'+id).removeClass('spinner');
@@ -117,7 +124,9 @@ $(document).on('click', '.reject-invite', function(e) {
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: rejectURL,
-    data:'id='+id,
+    data: {
+      id: id
+    },
     dataType: 'json',
     success: function(result){
       unfreezeScroll();
@@ -180,7 +189,10 @@ $(document).on('click', '.remove-invite', function(e){
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: removeInviteUrl,
-    data:'id_event='+id_event+'&id_user='+id_user,
+    data: {
+      id_event: id_event,
+      id_user: id_user
+    },
     dataType: 'json',
     success: function(result){
       $('#ev_'+id_event).removeClass('spinner');
@@ -344,7 +356,10 @@ $(document).on('click', '#addEvent', function(e) {
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     url: addURL,
-    data:'date='+date+'&title='+title,
+    data: {
+      date: date,
+      title: title
+    },
     dataType: 'json',
     success: function(result){
       $('#addEvent').removeClass('spinner');
@@ -417,7 +432,9 @@ function loadMonthCalendar() {
   $('#calendarContainer').addClass('spinner');
   $.ajax({
     url: calendarElementURL,
-    data: 'plusMonths='+plusMonths,
+    data: {
+      plusMonths: plusMonths
+    },
     type:'post',
     headers: { 'X-CSRF-Token': csrfToken },
     cache: false,

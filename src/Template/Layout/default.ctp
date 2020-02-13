@@ -1,4 +1,5 @@
 <?php
+  date_default_timezone_set('Australia/Sydney');
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,7 +15,7 @@
  * @var \App\View\AppView $this
  */
 
-$cakeDescription = 'SolarQuotes Calendar';
+ $cakeDescription = 'SolarQuotes Calendar';
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,6 +54,11 @@ $cakeDescription = 'SolarQuotes Calendar';
             <?php if(!isset($name)) {?>
               <a> Solar <span>Quotes</span> </a>
             <?php } ?>
+            <?php
+              $date = new DateTime();
+              $now = $date->format('Y, M d\t\h H:i:s');
+              echo $now;
+            ?>
         </div>
         <div class="top-nav-menu">
             <?php
@@ -60,7 +66,7 @@ $cakeDescription = 'SolarQuotes Calendar';
                 echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
                 echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
               }
-              if(isset($isAtCalendar) && $isAtCalendar){                
+              if(isset($isAtCalendar) && $isAtCalendar){
                 echo $this->Html->link('Export Data', "#", ["id" => "exportDataLink"]);
               }
             ?>

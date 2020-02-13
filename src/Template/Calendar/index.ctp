@@ -1,23 +1,17 @@
+<?php use Cake\Routing\Router; ?>
+
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-
-<?php
-  use Cake\Routing\Router;
-?>
-
-<head>
   <?= $this->Html->css('calendar.css') ?>
   <script>
-    var deleteURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "delete"]); ?>';
-    var addURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "add"]); ?>';
-    var inviteURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "invite"]); ?>';
-    var acceptURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "acceptInvitation"]); ?>';
-    var rejectURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "declineInvitation"]); ?>';
-    var removeInviteUrl = '<?php echo Router::url(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
-    var exportDataURL = '<?php echo Router::url(["controller" => "Calendar", "action" => "exportCalendarData"]); ?>';
-    var calendarElementURL = '<?php echo Router::url(["controller" => "Element", "action" => "calendar"]); ?>';
-
+    var deleteURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "delete"]); ?>';
+    var addURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "add"]); ?>';
+    var inviteURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "invite"]); ?>';
+    var acceptURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "acceptInvitation"]); ?>';
+    var rejectURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "declineInvitation"]); ?>';
+    var removeInviteUrl = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
+    var exportDataURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "exportCalendarData"]); ?>';
+    var calendarElementURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "index"]);?>';
     var plusMonths = <?= $plusMonths ?>
 
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';

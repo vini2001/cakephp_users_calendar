@@ -12,6 +12,9 @@
       public function index(){
 
         $plusMonths = 0;
+        if($this->request->is('ajax')){
+          $plusMonths = $this->request->getData('plusMonths');
+    		}
 
         $days = $this->Calendar->getDaysArray($plusMonths);
         $events = $this->Calendar->getEvents($days[0], $days[sizeof($days) - 1]);
@@ -26,6 +29,12 @@
         $this->set('invitedEvents', $invitedEvents);
         $this->set('users', $users);
         $this->set('isAtCalendar', true);
+
+        if($this->request->is('ajax')){
+          $this->viewPath = 'Element';
+          $this->render('calendar', 'ajax');
+        }
+
       }
 
       public function add(){
