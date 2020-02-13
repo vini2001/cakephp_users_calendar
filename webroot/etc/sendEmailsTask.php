@@ -1,5 +1,5 @@
 <?php
-  require '../..' . '/vendor/autoload.php';
+  require dirname(__DIR__) . '../..' . '/vendor/autoload.php';
   date_default_timezone_set('Australia/Sydney');
   include "db.php";
 
