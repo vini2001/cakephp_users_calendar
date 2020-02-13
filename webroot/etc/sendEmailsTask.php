@@ -16,7 +16,7 @@
 	  LEFT JOIN invitation I ON I.id_event = E.id
 	  LEFT JOIN users UI ON UI.id = I.id_user
     WHERE E.notified_1 <> 1
-      and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) > 0.166666
+      and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) > 0.966666
       and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) < 1.0833333
     ORDER BY E.id desc;
   ";
@@ -34,7 +34,7 @@
 	  LEFT JOIN invitation I ON I.id_event = E.id
 	  LEFT JOIN users UI ON UI.id = I.id_user
     WHERE E.notified_24 <> 1
-      and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) > 20.9166666
+      and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) > 23.9166666
       and ((UNIX_TIMESTAMP(E.date) - UNIX_TIMESTAMP('$now'))/(60*60)) < 24.0833333
     ORDER BY E.id desc;
   ";
