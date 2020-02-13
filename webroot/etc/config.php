@@ -1,0 +1,3 @@
+<?php
+  $SENDGRID_API_KEY = "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";
+?>
