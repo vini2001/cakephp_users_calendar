@@ -4,6 +4,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <?= $this->Html->css('calendar.css') ?>
   <script>
+    var rootURL = '<?php echo $this->Url->build("/"); ?>';
     var deleteURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "delete"]); ?>';
     var addURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "add"]); ?>';
     var inviteURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "invite"]); ?>';
@@ -17,6 +18,7 @@
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';
     var users = JSON.parse('<?= json_encode($users) ?>');
     var invitedEvents = JSON.parse('<?= json_encode($invitedEvents) ?>');
+    var events = JSON.parse('<?= json_encode($events) ?>');
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <?php echo $this->Html->script('calendar'); ?>

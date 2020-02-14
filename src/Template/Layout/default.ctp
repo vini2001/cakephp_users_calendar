@@ -56,8 +56,8 @@
             <?php } ?>
             <?php
               $date = new DateTime();
-              $now = $date->format('Y, M d\t\h H:i:s');
-              echo $now;
+              // $now = $date->format('Y, M d\t\h H:i:s');
+              // echo $now;
             ?>
         </div>
         <div class="top-nav-menu">

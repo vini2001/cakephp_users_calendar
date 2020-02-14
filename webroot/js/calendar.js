@@ -1,4 +1,101 @@
+// const check = () => {
+//   if (!('serviceWorker' in navigator)) {
+//     throw new Error('No Service Worker support!')
+//   }else if (!('PushManager' in window)) {
+//     throw new Error('No Push API Support!')
+//   }
+// }
 
+// const showLocalNotification = (title, body, swRegistration) => {
+//     const options = {
+//         body, // here you can add more properties like icon, image, vibrate, etc.
+//     };
+//     swRegistration.showNotification(title, options);
+// }
+
+const requestNotificationPermission = async () => {
+    const permission = await window.Notification.requestPermission();
+    if(permission !== 'granted'){
+        throw new Error('Permission not granted for Notification');
+    }else console.log("Notification_GRANTED")
+}
+
+// const registerServiceWorker = async () => {
+//     const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
+//     return swRegistration;
+// }
+
+var todayEvents = []
+const notifyEvents = async () => {
+  //var notification = new Notification("Minute complete!");
+  var today = new Date()
+  var hours = today.getHours()
+  var minutes = today.getMinutes()
+  console.log("NOW: " + hours + "/" + minutes)
+
+  todayEvents.forEach((item, i) => {
+    console.log("\n" + item.title + ": " + item.hours + "/" + item.minutes)
+    if(item.hours == hours && item.minutes == minutes){
+      var notification = new Notification(item.title + " now!", {
+        body: "Hurry, you have " + item.title + " right now",
+        silent: false
+      })
+    }
+  });
+
+}
+
+const initEventListener = () => {
+  var today = new Date();
+  var seconds = 60 - today.getSeconds();
+
+  events.forEach((item, i) => {
+
+    console.log(JSON.stringify(item))
+
+    var today = new Date()
+    var month = today.getMonth() + 1
+    var year = today.getYear() + 1900
+    var day = today.getDate();
+
+    var eventDate = new Date(item.date)
+    var eventDay = eventDate.getDate()
+    var eventMonth = eventDate.getMonth() + 1
+    var eventYear = eventDate.getYear() + 1900
+    var eventHours = eventDate.getHours();
+    var eventMinutes = eventDate.getMinutes();
+
+    if(eventDay == day && eventMonth == month && eventYear == year){
+      item.hours = eventHours
+      item.minutes = eventMinutes
+      todayEvents.push(item)
+    }
+  });
+
+
+  setTimeout(function(){
+    notifyEvents();
+    setInterval(function(){
+      notifyEvents();
+    }, 60 * 1000);
+  }, seconds * 1000);
+}
+
+const main = async () => {
+    // check();
+    // const swRegistration = await registerServiceWorker();
+    const permission =  await requestNotificationPermission();
+
+    // showLocalNotification('This is title', 'this is the message', swRegistration);
+    //var notification = new Notification("Hi there!");
+    initEventListener()
+
+}
+main();
+/*--------------------NOTIFICATIONS-SECTION-END--------------------*/
+
+
+/*--------------------LISTENERS-SECTION--------------------*/
 
 $(document).on('click', '#exportDataLink', function(e) {
   $('#exportDataModal').show();
@@ -367,7 +464,21 @@ $(document).on('click', '#addEvent', function(e) {
 
       snackbar("The event has been added successfuly");
 
+      var localeDate = new Date(date+'+11:00')
+      var today = new Date()
+
+      if(localeDate.getDate() == today.getDate() && localeDate.getMonth() == today.getMonth() && localeDate.getYear() == today.getYear()){
+        todayEvents.push({
+          title: title,
+          hours: localeDate.getHours(),
+          minutes: localeDate.getMinutes()
+        })
+      }
+
+      console.log(JSON.stringify(todayEvents))
+
       var id = result.id;
+      console.log(date)
       addEventCard(id, title, date);
     },
     error: function(xhr, status, error) {
