@@ -13,7 +13,7 @@
     var removeInviteUrl = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
     var exportDataURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "exportCalendarData"]); ?>';
     var calendarElementURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "index"]);?>';
-    var imagesURL = '<?= $this->request->webroot ?>img/';
+    var imagesURL = '<?= $this->request->getAttribute("webroot") ?>img/';
     var plusMonths = <?= $plusMonths ?>
 
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';

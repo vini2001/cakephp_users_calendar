@@ -52,7 +52,7 @@
         <div class="top-nav-title">
 
             <div>
-              <img src="<?= $this->request->webroot ?>img/logo.png" height="50px" width="auto"/>
+              <img src="<?= $this->request->getAttribute("webroot") ?>img/logo.png" height="50px" width="auto"/>
               </br>
               <a> <?php if(isset($name)) echo $name; ?> </a>
             </div>
