@@ -8,8 +8,8 @@
     }else{
       ?>
         <?php if(!isset($ev["invitedBy"])) {?>
-            <i id="<?= $ev["id"]; ?>" class="fa fa-trash-o align-right-event delete"></i>
-            <i id="<?= $ev["id"]; ?>" class="fa fa-user-o align-right-event invite" style="margin-right:2px;"></i>
+            <i id="<?= $ev["id"]; ?>" class="fa fa-trash-o align-right-event delete iconbtn"></i>
+            <i id="<?= $ev["id"]; ?>" class="fa fa-user-o align-right-event invite iconbtn" style="margin-right:2px;"></i>
         <?php }
     }
   ?>

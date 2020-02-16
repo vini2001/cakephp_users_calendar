@@ -1,4 +1,13 @@
-/* declare a 7 column grid on the table */
+
+#txt_time {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	padding: 10px;
+	background-color: rgba(27,117,187, 1);
+	color: white;
+	border-top-right-radius: 4px;
+}
 
 .inputAddEvent {
 	margin-right: 20px;
@@ -50,7 +59,7 @@ caption {
 }
 
 #calendar .weekdays {
-	background: #1770cf;
+	background: rgb(27,117,187);
 }
 
 
@@ -77,7 +86,7 @@ caption {
 #calendar .date {
 	text-align: center;
 	padding: 1px;
-	background: #333;
+	background: rgb(43,56,100);
 	color: #fff;
 	width: 20px;
 	height: 20px;
@@ -94,10 +103,14 @@ caption {
 	padding: 5px;
 	margin-bottom: 5px;
 	line-height: 14px;
-	background: #e4f2f2;
+	background: rgba(38,169,224,0.2);
 	border: 1px solid #b5dbdc;
 	color: #009aaf;
 	text-decoration: none;
+}
+
+.iconbtn {
+	color: rgb(43,56,100);
 }
 
 .event-invited {
@@ -117,14 +130,19 @@ caption {
 }
 
 .event:hover {
-  background: #c4e2f2;
+  /* background: rgba(38,169,224,0.4); */
 	cursor: pointer;
 }
 
 .event-desc {
-	color: #666;
+	color: rgb(43,56,100);
+	font-weight: bold;
 	margin: 3px 0 7px 0;
 	text-decoration: none;
+}
+
+.event-time {
+	color: rgb(43,56,100);
 }
 
 .event-user {
@@ -135,12 +153,12 @@ caption {
 }
 
 #calendar .other-month {
-	background: #edf6ff;
+	background: rgba(38,169,224,0.2);
 	color: #666;
 }
 
 #calendar .other-month:hover {
-	background: #ddf6ff;
+	background: rgba(38,169,224,0.4);
 	color: #666;
 	cursor: pointer;
 }

@@ -5,8 +5,8 @@ a {
 }
 
 .btn {
-  background-color:#1770cf;
-  border:0.1rem solid 1770cf;
+  background-color: rgb(27,117,187);
+  border:0.1rem solid rgb(27,117,187);
   border-radius:.4rem;
   color:#fff;
   cursor:pointer;
@@ -65,7 +65,7 @@ th {
 }
 .top-nav-title a {
     font-size: 2.4rem;
-    color: #1770cf;
+    color: rgb(27,117,187);
 }
 .top-nav-title span {
     color: #404041;
@@ -73,10 +73,12 @@ th {
 
 .top-nav-links a {
     margin: 0 0.5rem;
+    color: rgb(27,117,187);
 }
 
 .top-nav-menu a {
     margin: 0 0.5rem;
+    color: rgb(27,117,187);
 }
 
 .top-nav-title a,
@@ -206,7 +208,7 @@ th {
 }
 
 .logout {
-  color: red;
+  color: red !important;
 }
 
 #snackbar-container {

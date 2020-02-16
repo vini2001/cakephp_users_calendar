@@ -13,6 +13,7 @@
     var removeInviteUrl = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "removeInvite"]); ?>';
     var exportDataURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "exportCalendarData"]); ?>';
     var calendarElementURL = '<?php echo $this->Url->build(["controller" => "Calendar", "action" => "index"]);?>';
+    var imagesURL = '<?= $this->request->webroot ?>img/';
     var plusMonths = <?= $plusMonths ?>
 
     var csrfToken = '<?= $this->request->getParam('_csrfToken') ?>';
@@ -75,6 +76,13 @@
 
   <br/><br/>
 
+  <?php
+    $date = new DateTime();
+    $now = $date->format('Y, M d\t\h H:i');
+  ?>
+
+  <span id="txt_time"> <?= $now; ?></span>
+
   <script type="text/template" id="template-inputs">
     <?php
       $ev = [
@@ -100,5 +108,6 @@
       echo $this->element('eventContainer', ["ev" => $ev]);
     ?>
   </script>
+
 
 </body>

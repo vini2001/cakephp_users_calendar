@@ -50,12 +50,16 @@
 
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a> <?php if(isset($name)) echo $name; ?> </a>
-            <?php if(!isset($name)) {?>
-              <a> Solar <span>Quotes</span> </a>
-            <?php } ?>
+
+            <div>
+              <img src="<?= $this->request->webroot ?>img/logo.png" height="50px" width="auto"/>
+              </br>
+              <a> <?php if(isset($name)) echo $name; ?> </a>
+            </div>
+
+
             <?php
-              $date = new DateTime();
+              // $date = new DateTime();
               // $now = $date->format('Y, M d\t\h H:i:s');
               // echo $now;
             ?>
@@ -66,12 +70,14 @@
                 echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
                 echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
               }
+            ?>
+        </div>
+        <div class="top-nav-links">
+            <?php
               if(isset($isAtCalendar) && $isAtCalendar){
                 echo $this->Html->link('Export Data', "#", ["id" => "exportDataLink"]);
               }
             ?>
-        </div>
-        <div class="top-nav-links">
             <a target="_blank" href="https://www.solarquotes.com.au/">Website</a>
             <a target="_blank" href="https://play.google.com/store/apps/details?id=solarquotes.com.solarquotes">App</a>
             <?php if($loggedIn) echo $this->element('logoutLink'); ?>

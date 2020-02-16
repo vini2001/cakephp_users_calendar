@@ -1,4 +1,4 @@
-<?php  
+<?php
 
   function getTimestampFromDay($day){
     $d = $day["day"] >= 10 ? $day["day"] : ("0".$day["day"]);
