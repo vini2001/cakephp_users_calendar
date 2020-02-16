@@ -41,7 +41,7 @@ const notifyEvents = async () => {
         silent: false,
         icon: imagesURL+'/logo_notificacao.png'
       })
-      alert(body)
+      // alert(body)
     }
   });
 
