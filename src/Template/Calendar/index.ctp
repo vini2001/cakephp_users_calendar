@@ -28,8 +28,9 @@
 <body>
 
   <div class="row">
-    <div class="inputAddEvent"> <?php echo $this->Form->control("title", ["type" => "text", "placeholder" => "Meeting with...", "id" => "edt_title"]); ?> </div>
-    <div class="inputAddEvent"> <?php echo $this->Form->control("date", ["type" => "datetime-local", "id" => "edt_date"]); ?> </div>
+    <div class="inputAddEvent"> <span> Title </span>  <?php echo $this->Form->control("title", ["type" => "text", "placeholder" => "Meeting with...", "id" => "edt_title", "label" => false]); ?> </div>
+    <div class="inputAddEvent"> <span> Date </span> <input type="date" id="edt_date" placeholder="YYYY-MM-DD"/> </div>
+    <div class="inputAddEvent"> <span> Time </span> <input type="time" id="edt_time" placeholder="HH:MM"/> </div>
   </div>
   <div class="row"> <?php echo $this->Form->Button("Add", ["id" => "addEvent"]); ?> </div>
   <br/>
@@ -61,8 +62,10 @@
       <span class="box-title"> Export Data <span id="closeExportDataModal" class="close">&times;</span> </span>
       <div class="box">
         <div style="margin:10px;">
-          <?= $this->Form->control("From", ["type" => "datetime-local", "id" => "start_export_date"]); ?>
-          <?= $this->Form->control("Until", ["type" => "datetime-local", "id" => "end_export_date"]); ?>
+          <div class=""> <span> From </span> <input type="date" id="start_export_date" placeholder="YYYY-MM-DD"/> </div>
+          <div class=""> <input type="time" id="start_export_time" placeholder="HH:MM"/> </div>
+          <div class=""> <span> Until </span> <input type="date" id="end_export_date" placeholder="YYYY-MM-DD"/> </div>
+          <div class=""> <input type="time" id="end_export_time" placeholder="HH:MM"/> </div>
         </div>
       </div>
       <span id="btn_export_data" class="box-submit btn"> Export to CSV </span>

@@ -1,4 +1,8 @@
 
+input {
+	padding-top: 0px !important;
+}
+
 #txt_time {
 	position: fixed;
 	bottom: 0;

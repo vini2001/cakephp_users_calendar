@@ -1,17 +1,18 @@
-// const check = () => {
-//   if (!('serviceWorker' in navigator)) {
-//     throw new Error('No Service Worker support!')
-//   }else if (!('PushManager' in window)) {
-//     throw new Error('No Push API Support!')
-//   }
-// }
+const check = () => {
+  if (!('serviceWorker' in navigator)) {
+    throw new Error('No Service Worker support!')
+  }else if (!('PushManager' in window)) {
+    throw new Error('No Push API Support!')
+  }
+}
 
-// const showLocalNotification = (title, body, swRegistration) => {
-//     const options = {
-//         body, // here you can add more properties like icon, image, vibrate, etc.
-//     };
-//     swRegistration.showNotification(title, options);
-// }
+const showLocalNotification = (title, body, swRegistration) => {
+    const options = {
+        body,
+        icon: imagesURL+'/logo_notificacao.png'
+    };
+    swRegistration.showNotification(title, options);
+}
 
 const requestNotificationPermission = async () => {
     const permission = await window.Notification.requestPermission();
@@ -20,10 +21,10 @@ const requestNotificationPermission = async () => {
     }else console.log("Notification_GRANTED")
 }
 
-// const registerServiceWorker = async () => {
-//     const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
-//     return swRegistration;
-// }
+const registerServiceWorker = async () => {
+    const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
+    return swRegistration;
+}
 
 var todayEvents = []
 const notifyEvents = async () => {
@@ -36,11 +37,13 @@ const notifyEvents = async () => {
     console.log("\n" + item.title + ": " + item.hours + "/" + item.minutes)
     if(item.hours == hours && item.minutes == minutes){
       var body = "Hurry, you have " + item.title + " right now"
-      var notification = new Notification(item.title + " now!", {
+      var title = item.title + " now!"
+      /*var notification = new Notification(title, {
         body: body,
         silent: false,
         icon: imagesURL+'/logo_notificacao.png'
-      })
+      })*/
+      showLocalNotification(title, body, swRegistration)
       // alert(body)
     }
   });
@@ -103,10 +106,15 @@ const updateDate = () => {
   $('#txt_time').text(today);
 }
 
+var swRegistration
 const main = async () => {
-    // check();
-    // const swRegistration = await registerServiceWorker();
-    const permission =  await requestNotificationPermission();
+    check();
+    swRegistration = await registerServiceWorker();
+    try {
+       const permission =  await requestNotificationPermission();
+    } catch (e) {
+       showModalRequestNotificationPermission()
+    }
 
     // showLocalNotification('This is title', 'this is the message', swRegistration);
     //var notification = new Notification("Hi there!");
@@ -126,6 +134,12 @@ const removeFromTodayEvents = (id) => {
       return;
     }
   });
+}
+
+const showModalRequestNotificationPermission = async () => {
+  if(confirm("We would like to send you notifications when you event is about to start. Continue if you accept.")){
+    const permission =  await requestNotificationPermission();
+  }
 }
 
 
@@ -253,21 +267,24 @@ function loadMonthCalendar() {
 
 /*--------------------LISTENERS-SECTION--------------------*/
 
+
 $(document).on('click', '#exportDataLink', function(e) {
   $('#exportDataModal').show();
 })
 
 $(document).on('click', '#btn_export_data', function(e) {
-  var start_export_date = $('#start_export_date').val();
-  var end_export_date = $('#end_export_date').val();
+  var start_export_date = $('#start_export_date').val()
+  var start_export_time = $('#start_export_time').val()
+  var end_export_date = $('#end_export_date').val()
+  var end_export_time = $('#end_export_time').val()
 
-  if(start_export_date.length == 0){
-    snackbarError("Start Date is empty");
+  if(start_export_date.length == 0 || start_export_time.length == 0){
+    snackbarError("Start Date and time are required");
     return false;
   }
 
-  if(end_export_date.length == 0){
-    snackbarError("End Date is empty");
+  if(end_export_date.length == 0 || end_export_time.length == 0){
+    snackbarError("End Date and time are required");
     return false;
   }
 
@@ -399,7 +416,8 @@ $(document).on('click', '.reject-invite', function(e) {
 });
 
 $(document).on('click', '.day', function(e) {
-  $('#edt_date').val(this.id);
+  $('#edt_date').val(this.id.split('T')[0]);
+  $('#edt_time').val(this.id.split('T')[1]);
 });
 
 
@@ -540,6 +558,7 @@ $(document).on('click', '#btn_invite', function(e) {
 
 $(document).on('click', '#addEvent', function(e) {
   var date = $('#edt_date').val();
+  var time = $('#edt_time').val();
   var title = $('#edt_title').val();
 
   if(title.length == 0){
@@ -547,10 +566,12 @@ $(document).on('click', '#addEvent', function(e) {
     return false;
   }
 
-  if(date.length == 0){
+  if(date.length == 0 || time.length == 0){
     snackbarError("You need to choose the date and time");
     return false;
   }
+
+  date += 'T'+time;
 
   $('#addEvent').addClass('spinner');
   // freezeScroll();
