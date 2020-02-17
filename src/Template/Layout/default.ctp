@@ -70,14 +70,12 @@
                 echo $this->Html->link('Users',["controller" => "Users","action" => "index"]);
                 echo $this->Html->link('Calendar',["controller" => "Calendar","action" => "index"]);
               }
-            ?>
-        </div>
-        <div class="top-nav-links">
-            <?php
               if(isset($isAtCalendar) && $isAtCalendar){
                 echo $this->Html->link('Export Data', "#", ["id" => "exportDataLink"]);
               }
             ?>
+        </div>
+        <div class="top-nav-links">
             <a target="_blank" href="https://www.solarquotes.com.au/">Website</a>
             <a target="_blank" href="https://play.google.com/store/apps/details?id=solarquotes.com.solarquotes">App</a>
             <?php if($loggedIn) echo $this->element('logoutLink'); ?>

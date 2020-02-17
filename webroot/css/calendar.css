@@ -18,6 +18,12 @@ input {
 	width: 300px;
 }
 
+@media screen and (max-width: 640px) {
+	.inputAddEvent {
+		width: 100%;
+	}
+}
+
 .rowForm {
 	display:flex;
 	flex-direction:column;

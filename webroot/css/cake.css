@@ -186,9 +186,25 @@ th {
 }
 
 @media screen and (max-width: 640px) {
+
+    .logout {
+  		position: absolute;
+      top: 10px;
+      right: 0px;
+  	}
+
     .top-nav {
         margin: 0 auto;
+        display: block;
     }
+    .top-nav-title {
+      width: 100%;
+    }
+
+    .top-nav-menu {
+      margin-top: 20px;
+    }
+
     .side-nav {
         margin-bottom: 1rem;
     }
@@ -210,6 +226,7 @@ th {
 .logout {
   color: red !important;
 }
+
 
 #snackbar-container {
   display: none;
