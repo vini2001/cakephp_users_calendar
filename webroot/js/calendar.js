@@ -1,18 +1,18 @@
-const check = () => {
-  if (!('serviceWorker' in navigator)) {
-    throw new Error('No Service Worker support!')
-  }else if (!('PushManager' in window)) {
-    throw new Error('No Push API Support!')
-  }
-}
+// const check = () => {
+//   if (!('serviceWorker' in navigator)) {
+//     throw new Error('No Service Worker support!')
+//   }else if (!('PushManager' in window)) {
+//     throw new Error('No Push API Support!')
+//   }
+// }
 
-const showLocalNotification = (title, body, swRegistration) => {
-    const options = {
-        body,
-        icon: imagesURL+'/logo_notificacao.png'
-    };
-    swRegistration.showNotification(title, options);
-}
+// const showLocalNotification = (title, body, swRegistration) => {
+//     const options = {
+//         body,
+//         icon: imagesURL+'/logo_notificacao.png'
+//     };
+//     swRegistration.showNotification(title, options);
+// }
 
 const requestNotificationPermission = async () => {
     const permission = await window.Notification.requestPermission();
@@ -21,10 +21,10 @@ const requestNotificationPermission = async () => {
     }else console.log("Notification_GRANTED")
 }
 
-const registerServiceWorker = async () => {
-    const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
-    return swRegistration;
-}
+// const registerServiceWorker = async () => {
+//     const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
+//     return swRegistration;
+// }
 
 var todayEvents = []
 const notifyEvents = async () => {
@@ -38,12 +38,12 @@ const notifyEvents = async () => {
     if(item.hours == hours && item.minutes == minutes){
       var body = "Hurry, you have " + item.title + " right now"
       var title = item.title + " now!"
-      /*var notification = new Notification(title, {
+      var notification = new Notification(title, {
         body: body,
         silent: false,
-        icon: imagesURL+'/logo_notificacao.png'
-      })*/
-      showLocalNotification(title, body, swRegistration)
+        icon: imagesURL+'logo_notificacao.png'
+      })
+      // showLocalNotification(title, body, swRegistration)
       // alert(body)
     }
   });
@@ -108,18 +108,19 @@ const updateDate = () => {
 
 var swRegistration
 const main = async () => {
-    check();
-    swRegistration = await registerServiceWorker();
+    // check();
+    // swRegistration = await registerServiceWorker();
     try {
        const permission =  await requestNotificationPermission();
     } catch (e) {
-       showModalRequestNotificationPermission()
+       showModalRequestNotificationPermission() //Firefox doesn't allow request permission without user's interaction
     }
 
     // showLocalNotification('This is title', 'this is the message', swRegistration);
     //var notification = new Notification("Hi there!");
     initEventListener()
     updateDate()
+    console.log(imagesURL+'logo_notificacao.png')
 }
 main();
 /*--------------------NOTIFICATIONS-SECTION-END--------------------*/
