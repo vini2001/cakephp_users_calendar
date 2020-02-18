@@ -4,7 +4,7 @@
 /logs/*
 /tmp/*
 /vendor/*
-
+/webroot/.htaccess
 config.php
 
 # OS generated files #
