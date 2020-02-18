@@ -6,7 +6,6 @@
 /vendor/*
 
 config.php
-service.js
 
 # OS generated files #
 ######################
