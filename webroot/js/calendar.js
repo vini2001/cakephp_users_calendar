@@ -1,18 +1,4 @@
-// const check = () => {
-//   if (!('serviceWorker' in navigator)) {
-//     throw new Error('No Service Worker support!')
-//   }else if (!('PushManager' in window)) {
-//     throw new Error('No Push API Support!')
-//   }
-// }
 
-// const showLocalNotification = (title, body, swRegistration) => {
-//     const options = {
-//         body,
-//         icon: imagesURL+'/logo_notificacao.png'
-//     };
-//     swRegistration.showNotification(title, options);
-// }
 
 const requestNotificationPermission = async () => {
     try{
@@ -25,15 +11,10 @@ const requestNotificationPermission = async () => {
         // throws a TypeError. It takes a callback as the first argument
         // instead.
         window.Notification.requestPermission(() => {
-          console.log("foi?")            
         });
     }
 }
 
-// const registerServiceWorker = async () => {
-//     const swRegistration = await navigator.serviceWorker.register(rootURL+'webroot/js/service.js'); //notice the file name
-//     return swRegistration;
-// }
 
 var todayEvents = []
 const notifyEvents = async () => {
@@ -52,8 +33,6 @@ const notifyEvents = async () => {
         silent: false,
         icon: imagesURL+'logo_notificacao.png'
       })
-      // showLocalNotification(title, body, swRegistration)
-      // alert(body)
     }
   });
 
@@ -73,6 +52,7 @@ const initEventListener = () => {
     var day = today.getDate();
 
     var eventDate = new Date(item.date)
+    console.log(eventDate)
     var eventDay = eventDate.getDate()
     var eventMonth = eventDate.getMonth() + 1
     var eventYear = eventDate.getYear() + 1900
@@ -117,16 +97,13 @@ const updateDate = () => {
 
 var swRegistration
 const main = async () => {
-    // check();
-    // swRegistration = await registerServiceWorker();
+
     try {
        const permission =  await requestNotificationPermission();
     } catch (e) {
        showModalRequestNotificationPermission() //Firefox doesn't allow request permission without user's interaction
     }
 
-    // showLocalNotification('This is title', 'this is the message', swRegistration);
-    //var notification = new Notification("Hi there!");
     initEventListener()
     updateDate()
     console.log(imagesURL+'logo_notificacao.png')
@@ -221,19 +198,19 @@ function getTimestampFromDay(day){
   return day.year + "-" + month + "-" + d + "T" + day.time;
 }
 
-function freezeScroll(){
-  $('html').css({
-      'overflow': 'hidden',
-      'height': '100%'
-  });
-}
-
-function unfreezeScroll(){
-  $('html').css({
-      'overflow': 'auto',
-      'height': 'auto'
-  });
-}
+// function freezeScroll(){
+//   $('html').css({
+//       'overflow': 'hidden',
+//       'height': '100%'
+//   });
+// }
+//
+// function unfreezeScroll(){
+//   $('html').css({
+//       'overflow': 'auto',
+//       'height': 'auto'
+//   });
+// }
 
 function previousMonth() {
   plusMonths--;
@@ -333,7 +310,6 @@ $(document).on('click', '.delete', function(e) {
 
 
   $('#ev_'+id).addClass('spinner');
-  // freezeScroll();
 
   $.ajax({
     type:'post',
@@ -344,7 +320,6 @@ $(document).on('click', '.delete', function(e) {
     },
     dataType: 'json',
     success: function(result){
-      // unfreezeScroll();
       $('#ev_'+id).remove();
       removeFromTodayEvents(id)
     },
@@ -364,7 +339,6 @@ $(document).on('click', '.accept-invite', function(e) {
   var id = this.id;
 
   $('#ev_'+id).addClass('spinner');
-  // freezeScroll();
 
   $.ajax({
     type:'post',
@@ -376,7 +350,6 @@ $(document).on('click', '.accept-invite', function(e) {
     dataType: 'json',
     success: function(result){
       $('#ev_'+id).removeClass('spinner');
-      // unfreezeScroll();
       $('#ev_'+id).remove();
       var event = getEvent(parseInt(id));
       addEventInvitedCard(event.id, event.title, event.date, event.invitedBy);
@@ -399,7 +372,6 @@ $(document).on('click', '.reject-invite', function(e) {
 
 
   $('#ev_'+id).addClass('spinner');
-  // freezeScroll();
 
   $.ajax({
     type:'post',
@@ -410,7 +382,6 @@ $(document).on('click', '.reject-invite', function(e) {
     },
     dataType: 'json',
     success: function(result){
-      // unfreezeScroll();
       $('#ev_'+id).removeClass('spinner');
       $('#ev_'+id).remove();
     },
@@ -465,7 +436,6 @@ $(document).on('click', '.remove-invite', function(e){
 
 
   $('#ev_'+id_event).addClass('spinner');
-  // freezeScroll();
 
   $.ajax({
     type:'post',
@@ -487,7 +457,6 @@ $(document).on('click', '.remove-invite', function(e){
           return;
         }
       })
-      // unfreezeScroll();
       snackbar("User was successfuly uninvited");
     },
     error: function(xhr, status, error) {
@@ -530,7 +499,6 @@ $(document).on('click', '#btn_invite', function(e) {
     id_event: id_event
   };
 
-  // freezeScroll();
   $('#addEvent').addClass('spinner');
 
   $.ajax({
@@ -541,7 +509,6 @@ $(document).on('click', '#btn_invite', function(e) {
     dataType: 'json',
     success: function(result){
       $('#addEvent').removeClass('spinner');
-      // unfreezeScroll();
       snackbar('Invitations sent successfuly');
 
       users_ids.forEach((item, index) => { //I'm aware it would be better if I just request from the server which users are already invited to the event when click on the event, but I still have somethings to do, maybe I'll change it later, is it necessary?
@@ -555,7 +522,6 @@ $(document).on('click', '#btn_invite', function(e) {
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
-      // unfreezeScroll();
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
           snackbarError(errorBody.error);
@@ -567,6 +533,7 @@ $(document).on('click', '#btn_invite', function(e) {
 });
 
 $(document).on('click', '#addEvent', function(e) {
+  console.log(String(new Date()))
   var date = $('#edt_date').val();
   var time = $('#edt_time').val();
   var title = $('#edt_title').val();
@@ -584,7 +551,6 @@ $(document).on('click', '#addEvent', function(e) {
   date += 'T'+time;
 
   $('#addEvent').addClass('spinner');
-  // freezeScroll();
 
   $.ajax({
     type:'post',
@@ -597,7 +563,6 @@ $(document).on('click', '#addEvent', function(e) {
     dataType: 'json',
     success: function(result){
       $('#addEvent').removeClass('spinner');
-      // unfreezeScroll();
 
       snackbar("The event has been added successfuly");
 
@@ -620,7 +585,6 @@ $(document).on('click', '#addEvent', function(e) {
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
-      // unfreezeScroll();
       var errorBody = JSON.parse(xhr.responseText);
       if(errorBody.error != undefined){
           snackbarError(errorBody.error);
