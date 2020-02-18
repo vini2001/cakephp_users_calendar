@@ -29,7 +29,7 @@
 
   <div class="row">
     <div class="inputAddEvent"> <span> Title </span>  <?php echo $this->Form->control("title", ["type" => "text", "placeholder" => "Meeting with...", "id" => "edt_title", "label" => false]); ?> </div>
-    <div class="inputAddEvent"> <span> Date </span> <?php echo $this->Form->control("date", ["type" => "date", "placeholder" => "YYYY-MM-DD", "id" => "edt_date", "label" => false]); ?> </div>
+    <div class="inputAddEvent"> <span> Date </span> <input type="date" id="edt_date" placeholder="YYYY-MM-DD"/> </div>
     <div class="inputAddEvent"> <span> Time </span> <input type="time" id="edt_time" placeholder="HH:MM"/> </div>
   </div>
   <div class="row"> <?php echo $this->Form->Button("Add", ["id" => "addEvent"]); ?> </div>
