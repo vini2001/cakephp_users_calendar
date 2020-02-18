@@ -15,10 +15,19 @@
 // }
 
 const requestNotificationPermission = async () => {
-    const permission = await window.Notification.requestPermission();
-    if(permission !== 'granted'){
-        throw new Error('Permission not granted for Notification');
-    }else console.log("Notification_GRANTED")
+    try{
+      const permission = await window.Notification.requestPermission();
+      if(permission !== 'granted'){
+          throw new Error('Permission not granted for Notification');
+      }else console.log("Notification_GRANTED")
+    }catch(error) {
+      // Safari doesn't return a promise for requestPermissions and it
+        // throws a TypeError. It takes a callback as the first argument
+        // instead.
+        window.Notification.requestPermission(() => {
+          console.log("foi?")            
+        });
+    }
 }
 
 // const registerServiceWorker = async () => {
