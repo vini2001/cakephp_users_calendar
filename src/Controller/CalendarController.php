@@ -55,6 +55,7 @@
               return $this->App->errorOut("You cannot add events in the past", 400);
 
            $user_id = $this->Auth->user('id');
+           $user_name = $this->Auth->user('name');
 
            $this->loadModel('Events');
            $ev = $this->Events->newEntity();
@@ -66,7 +67,8 @@
               ->withType('application/json')
               ->withStringBody(json_encode([
                 'status' => 200,
-                'id' => $ev->id
+                'id' => $ev->id,
+                'user_name' => $user_name
               ]));
            }else{
              return $this->App->errorOut();

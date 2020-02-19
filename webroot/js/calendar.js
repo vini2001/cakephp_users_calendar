@@ -1,11 +1,12 @@
 
-
 const requestNotificationPermission = async () => {
     try{
       const permission = await window.Notification.requestPermission();
       if(permission !== 'granted'){
           throw new Error('Permission not granted for Notification');
-      }else console.log("Notification_GRANTED")
+      }else {
+        console.log("Notification_GRANTED")
+      }
     }catch(error) {
       // Safari doesn't return a promise for requestPermissions and it
         // throws a TypeError. It takes a callback as the first argument
@@ -28,11 +29,15 @@ const notifyEvents = async () => {
     if(item.hours == hours && item.minutes == minutes){
       var body = "Hurry, you have " + item.title + " right now"
       var title = item.title + " now!"
-      var notification = new Notification(title, {
-        body: body,
-        silent: false,
-        icon: imagesURL+'logo_notificacao.png'
-      })
+      try{
+        var notification = new Notification(title, {
+          body: body,
+          silent: false,
+          icon: imagesURL+'logo_notificacao.png'
+        })
+      }catch(error){
+        alert(body) //Mobile Chrome doesn't support notifications anymore
+      }
     }
   });
 
@@ -95,7 +100,6 @@ const updateDate = () => {
   $('#txt_time').text(today);
 }
 
-var swRegistration
 const main = async () => {
 
     try {
@@ -106,7 +110,6 @@ const main = async () => {
 
     initEventListener()
     updateDate()
-    console.log(imagesURL+'logo_notificacao.png')
 }
 main();
 /*--------------------NOTIFICATIONS-SECTION-END--------------------*/
@@ -130,9 +133,15 @@ const showModalRequestNotificationPermission = async () => {
 }
 
 
-function addEventCard(id, title, date){
+function addEventCard(id, title, date, user_name){
   var template = $.trim($('#template-inputs').html());
   var dateObj = new Date(date);
+
+  var a = date.split(/[^0-9]/);
+  var dateObj = new Date (a[0],a[1]-1,a[2],a[3],a[4]);
+  //new Date(date) converts to local timezone on Safari
+
+
   var hours = dateObj.getHours();
   if (hours < 10) hours = "0"+hours;
   var minutes = dateObj.getMinutes();
@@ -143,7 +152,7 @@ function addEventCard(id, title, date){
     .replace(/:::id/g, id)
     .replace(/:::title/, title)
     .replace(/:::time/, time)
-    .replace(/:::user_name/, "");
+    .replace(/:::user_name/, user_name);
 
 
   var day = dateObj.getDate();
@@ -566,7 +575,8 @@ $(document).on('click', '#addEvent', function(e) {
 
       snackbar("The event has been added successfuly");
 
-      var id = result.id;
+      var id = result.id
+      var user_name = result.user_name
 
       var localeDate = new Date(date+'+11:00')
       var today = new Date()
@@ -581,7 +591,7 @@ $(document).on('click', '#addEvent', function(e) {
       }
 
       console.log(date)
-      addEventCard(id, title, date);
+      addEventCard(id, title, date, user_name);
     },
     error: function(xhr, status, error) {
       $('#addEvent').removeClass('spinner');
