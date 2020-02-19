@@ -72,6 +72,31 @@ const initEventListener = () => {
   });
 
 
+  invitedEvents.forEach((item, i) => {
+
+    console.log(JSON.stringify(item))
+
+    var today = new Date()
+    var month = today.getMonth() + 1
+    var year = today.getYear() + 1900
+    var day = today.getDate();
+
+    var eventDate = new Date(item.date.replace(' ', 'T'))
+    console.log(eventDate)
+    var eventDay = eventDate.getDate()
+    var eventMonth = eventDate.getMonth() + 1
+    var eventYear = eventDate.getYear() + 1900
+    var eventHours = eventDate.getHours();
+    var eventMinutes = eventDate.getMinutes();
+
+    if(eventDay == day && eventMonth == month && eventYear == year){
+      item.hours = eventHours
+      item.minutes = eventMinutes
+      todayEvents.push(item)
+    }
+  });
+
+
   setTimeout(function(){
     notifyEvents()
     updateDate()
