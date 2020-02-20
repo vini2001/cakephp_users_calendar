@@ -9,6 +9,11 @@
 
    class CalendarController extends AppController{
 
+      public function initialize() {
+          parent::initialize();
+          $this->loadComponent('Calendar');
+      }
+
       public function index(){
 
         $plusMonths = 0;
@@ -213,7 +218,6 @@
 
       public function beforeFilter(Event $event) {
           parent::beforeFilter($event);
-          $this->loadComponent('Calendar');
       }
 
 
